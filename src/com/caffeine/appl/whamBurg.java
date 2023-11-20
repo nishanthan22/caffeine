@@ -1,3 +1,5 @@
+package com.caffeine.appl;
+
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
