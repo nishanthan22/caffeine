@@ -1,38 +1,32 @@
 package com.caffeine.appl;
 
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.util.List;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import com.caffeine.manager.Utilities;
 
 public class AutoCity {
 	public static void main(String[] args) {
 		// Set the path to your ChromeDriver
-      System.setProperty("webdriver.chrome.driver", "D:\\my\\study software\\chromeDriver\\chromedriver-win64\\chromedriver.exe");
-      WebDriver driver =  new ChromeDriver();
-		
-	   driver.get("https://www.autocityhp.com/menu");
-	   
-		String filePath = "D:\\MAC WINDSOR\\Olena\\caffine-webCrawl\\Caffine\\AutoCity.txt";
+		WebDriver driver = new ChromeDriver();
 
+		driver.get(Constants.AUTOCITY_URL);
+
+		String filePath = Utilities.getFilePath(Constants.FILE_NAME_PATH_PREFIX, "AutoCity.txt");
 	   
 	   try {
            Thread.sleep(5000); // waiting for the output to come based on the input and also change the time according to your requirement
-       } catch (InterruptedException e) {
-           e.printStackTrace();
-       }
+      
 	   
 	   
-		try (BufferedWriter bw = new BufferedWriter(new FileWriter(filePath))) {
+		BufferedWriter bw = new BufferedWriter(new FileWriter(filePath)) ;
 
 			bw.write("----------\n");
             bw.write("Original Menu\n");
@@ -50,9 +44,9 @@ public class AutoCity {
                 WebElement descriptionElement = product.findElement(By.cssSelector(".kv-ee-accent-border .kv-ee-body--sm"));
                 String description = descriptionElement.getText();
 
-                bw.write("Title: " + title + "\n");
-                bw.write("Price: " + price + "\n");
-                bw.write("Description: " + description + "\n");
+                bw.write(Constants.TITLE + title + "\n");
+                bw.write(Constants.PRICE + price + "\n");
+                bw.write(Constants.DESCRIPTION + description + "\n");
                 bw.write("----------\n");
             }
 
@@ -73,9 +67,9 @@ public class AutoCity {
                 String description = descriptionElement.getText();
 
                 // Write the extracted details to the file
-                bw.write("Title: " + title + "\n");
-                bw.write("Price: " + price + "\n");
-                bw.write("Description: " + description + "\n");
+                bw.write(Constants.TITLE + title + "\n");
+                bw.write(Constants.PRICE + price + "\n");
+                bw.write(Constants.DESCRIPTION + description + "\n");
                 bw.write("-------------------------------------------------\n");
             }
        
@@ -96,9 +90,9 @@ public class AutoCity {
                 String description = descriptionElement.getText();
 
                 // Write the extracted details to the file
-                bw.write("Title: " + title + "\n");
-                bw.write("Price: " + price + "\n");
-                bw.write("Description: " + description + "\n");
+                bw.write(Constants.TITLE + title + "\n");
+                bw.write(Constants.PRICE + price + "\n");
+                bw.write(Constants.DESCRIPTION + description + "\n");
                 bw.write("-------------------------------------------------\n");
             }
        
@@ -119,9 +113,9 @@ public class AutoCity {
                 String description = descriptionElement.getText();
 
                 // Write the extracted details to the file
-                bw.write("Title: " + title + "\n");
-                bw.write("Price: " + price + "\n");
-                bw.write("Description: " + description + "\n");
+                bw.write(Constants.TITLE + title + "\n");
+                bw.write(Constants.PRICE + price + "\n");
+                bw.write(Constants.DESCRIPTION + description + "\n");
                 bw.write("-------------------------------------------------\n");
             }
 
@@ -142,9 +136,9 @@ public class AutoCity {
                 String description = descriptionElement.getText();
 
                 // Write the extracted details to the file
-                bw.write("Title: " + title + "\n");
-                bw.write("Price: " + price + "\n");
-                bw.write("Description: " + description + "\n");
+                bw.write(Constants.TITLE + title + "\n");
+                bw.write(Constants.PRICE + price + "\n");
+                bw.write(Constants.DESCRIPTION + description + "\n");
                 bw.write("-------------------------------------------------\n");
             }
 
@@ -166,13 +160,13 @@ public class AutoCity {
                 String description = descriptionElement.getText();
 
                 // Write the extracted details to the file
-                bw.write("Title: " + title + "\n");
-                bw.write("Price: " + price + "\n");
-                bw.write("Description: " + description + "\n");
+                bw.write(Constants.TITLE + title + "\n");
+                bw.write(Constants.PRICE + price + "\n");
+                bw.write(Constants.DESCRIPTION + description + "\n");
                 bw.write("-------------------------------------------------\n");
             }
        System.out.println("Data saved to file: " + filePath); // Confirm the data was saved to the file
-		} catch (IOException e) {
+		} catch (Exception e) {
 		    e.printStackTrace();
 		}
 
