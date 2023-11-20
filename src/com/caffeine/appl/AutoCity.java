@@ -31,7 +31,7 @@ public class AutoCity {
            e.printStackTrace();
        }
 	   
-	   
+	   //SAMPLE
 		try (BufferedWriter bw = new BufferedWriter(new FileWriter(filePath))) {
 
 			bw.write("----------\n");
