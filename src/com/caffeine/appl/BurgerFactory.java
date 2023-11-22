@@ -17,22 +17,26 @@ import com.caffeine.manager.Utilities;
 public class BurgerFactory {
 	public static void main(String[] args) {
 
-		String filePath = Utilities.getFilePath(Constants.FILE_NAME_PATH_PREFIX, "BurgerFactory.txt");
+		String txtFilePath = Utilities.getFilePath(Constants.FILE_NAME_PATH_PREFIX, "BurgerFactory.txt");
+		String csvFilePath = Utilities.getFilePath(Constants.FILE_NAME_PATH_PREFIX, "BurgerFactory.csv");
+
 
 		// Create a new instance of the Chrome driver
 		WebDriver driver = new ChromeDriver();
 
 		driver.get(Constants.BURGERFACTORY_URL);
 
-		try (BufferedWriter bw = new BufferedWriter(new FileWriter(filePath))) {
+		
+	    StringBuilder consoleOutput = new StringBuilder();
+	    StringBuilder csvOutput = new StringBuilder();
+	       csvOutput.append("Title,Price,Description\n");
+
 			// Extracting and printing the h2 text content
 			WebElement h2Element = driver
 					.findElement(By.cssSelector("h2.elementor-heading-title.elementor-size-default"));
 			String h2Text = h2Element.getText();
-			bw.write(h2Text);
-			bw.newLine();
-			bw.write("--------------------------------------------------------------------------------");
-			bw.newLine();
+			
+			consoleOutput.append(h2Text + "\n-------------\n");
 
 			// Find the desired section
 			WebElement sectionElement = driver.findElement(By.cssSelector("section[data-id='6fbf9391']"));
@@ -47,32 +51,27 @@ public class BurgerFactory {
 				WebElement burgerDetailsElement = column.findElement(By.cssSelector("p.elementor-heading-title"));
 
 				// Extracting information
-				String burgerName = "Burger Name: " + burgerNameElement.getText();
-				String burgerDetails = "Burger Details: " + burgerDetailsElement.getText();
-
+				String title =  burgerNameElement.getText();
+				String description = burgerDetailsElement.getText();
+				String[] price = description.split("\\$");
+				
+				String descriptionCSV = price[0].replaceAll("\n", " ").replace(",", ";");
+                csvOutput.append(String.format("%s,%s,%s\n", title, price[1], descriptionCSV));
 				// Writing to the file
-				bw.write(burgerName);
-				bw.newLine();
-				bw.write(burgerDetails);
-				bw.newLine();
-				bw.write("--------------");
-				bw.newLine();
+				consoleOutput.append(Constants.TITLE).append(title).append("\n")
+                .append(Constants.PRICE).append(price[1]).append("\n")
+                .append(Constants.DESCRIPTION).append(price[0]).append("\n")
+                .append("----------\n");
 			}
 
 			WebElement nestedH2Element = driver.findElement(By.cssSelector("div[data-id='57c69a8e']"));
+			String data = nestedH2Element.getText();
 
-			// Write the text content of the nested <h2> element to the file
-			bw.write(nestedH2Element.getText());
-			bw.newLine();
-			bw.write("--------------------------------------------------------------------------------");
-			bw.newLine();
+			consoleOutput.append(data + "\n-------------\n");
 
 			List<WebElement> additionalSections1 = driver.findElements(By.cssSelector("section[data-id='3ea899a3']"));
 
-			List<Map<String, String>> menuItems1 = new ArrayList<>();
-
 			for (WebElement section : additionalSections1) {
-				Map<String, String> menuItem = new HashMap<>();
 
 				List<WebElement> headingElements = section.findElements(By.cssSelector("h3.elementor-heading-title"));
 				List<WebElement> priceElements = section.findElements(By.cssSelector("p.elementor-heading-title"));
@@ -81,33 +80,24 @@ public class BurgerFactory {
 				for (int i = 0; i < headingElements.size(); i++) {
 					String headingText = headingElements.get(i).getText();
 					String priceText = priceElements.get(i).getText();
+					String[] price = priceText.split("\\$");
+					
+					String descriptionCSV = price[0].replaceAll("\n", " ").replace(",", ";");
+	                csvOutput.append(String.format("%s,%s,%s\n", headingText, price[1], descriptionCSV));
+	                
+					consoleOutput.append(Constants.TITLE).append(headingText).append("\n")
+	                .append(Constants.PRICE).append(price[1]).append("\n")
+	                .append(Constants.DESCRIPTION).append(price[0]).append("\n")
+	                .append("----------\n");
+					}
 
-					// Put title and price in a string array
-					String[] titleAndPrice = { headingText, priceText };
-
-					// Map the string array to the map
-					menuItem.put(Constants.TITLE.toLowerCase(), titleAndPrice[0]);
-					menuItem.put(Constants.PRICE.toLowerCase(), titleAndPrice[1]);
-
-					// Write to the file
-					bw.write(Constants.TITLE + titleAndPrice[0]);
-					bw.newLine();
-					bw.write(Constants.PRICE + titleAndPrice[1]);
-					bw.newLine();
-					bw.write("----------");
-					bw.newLine();
-				}
-
-				// Add the map to the list
-				menuItems1.add(menuItem);
+//				// Add the map to the list
+//				menuItems1.add(menuItem);
 			}
-
+//
 			List<WebElement> additionalSections2 = driver.findElements(By.cssSelector("section[data-id='5f3b92ad']"));
 
-			List<Map<String, String>> menuItems2 = new ArrayList<>();
-
 			for (WebElement section : additionalSections2) {
-				Map<String, String> menuItem = new HashMap<>();
 
 				List<WebElement> headingElements = section.findElements(By.cssSelector("h3.elementor-heading-title"));
 				List<WebElement> priceElements = section.findElements(By.cssSelector("p.elementor-heading-title"));
@@ -115,33 +105,23 @@ public class BurgerFactory {
 				for (int i = 0; i < headingElements.size(); i++) {
 					String headingText = headingElements.get(i).getText();
 					String priceText = priceElements.get(i).getText();
+					String[] price = priceText.split("\\$");
+					
+					String descriptionCSV = price[0].replaceAll("\n", " ").replace(",", ";");
+	                csvOutput.append(String.format("%s,%s,%s\n", headingText, price[1], descriptionCSV));
 
-					// Write data to the file
-					bw.write(Constants.TITLE + headingText);
-					bw.newLine();
-					bw.write(Constants.PRICE + priceText);
-					bw.newLine();
-					bw.write("----------");
-					bw.newLine();
-
-					// Put title and price in a string array
-					String[] titleAndPrice = { headingText, priceText };
-
-					// Map the string array to the map
-					menuItem.put(Constants.TITLE.toLowerCase(), titleAndPrice[0]);
-					menuItem.put(Constants.PRICE.toLowerCase(), titleAndPrice[1]);
-				}
-
-				// Add the map to the list
-				menuItems2.add(menuItem);
-			}
-
+					consoleOutput.append(Constants.TITLE).append(headingText).append("\n")
+	                .append(Constants.PRICE).append(price[1]).append("\n")
+	                .append(Constants.DESCRIPTION).append(price[0]).append("\n")
+	                .append("----------\n");
+					}
+	
+				}	
+			
+//
 			List<WebElement> additionalSections3 = driver.findElements(By.cssSelector("section[data-id='17a6956c']"));
 
-			List<Map<String, String>> menuItems3 = new ArrayList<>();
-
 			for (WebElement section : additionalSections3) {
-				Map<String, String> menuItem = new HashMap<>();
 
 				List<WebElement> headingElements = section.findElements(By.cssSelector("h3.elementor-heading-title"));
 				List<WebElement> priceElements = section.findElements(By.cssSelector("p.elementor-heading-title"));
@@ -149,49 +129,43 @@ public class BurgerFactory {
 				for (int i = 0; i < headingElements.size(); i++) {
 					String headingText = headingElements.get(i).getText();
 					String priceText = priceElements.get(i).getText();
+					String[] price = priceText.split("\\$");
+					
+					String descriptionCSV = price[0].replaceAll("\n", " ").replace(",", ";");
+	                csvOutput.append(String.format("%s,%s,%s\n", headingText, price[1], descriptionCSV));
 
-					// Write data to the file
-					bw.write(Constants.TITLE + headingText);
-					bw.newLine();
-					bw.write(Constants.PRICE + priceText);
-					bw.newLine();
-					bw.write("----------");
-					bw.newLine();
+					consoleOutput.append(Constants.TITLE).append(headingText).append("\n")
+	                .append(Constants.PRICE).append(price[1]).append("\n")
+	                .append(Constants.DESCRIPTION).append(price[0]).append("\n")
+	                .append("----------\n");
 
-					// Put title and price in a string array
-					String[] titleAndPrice = { headingText, priceText };
-
-					// Map the string array to the map
-					menuItem.put(Constants.TITLE.toLowerCase(), titleAndPrice[0]);
-					menuItem.put(Constants.PRICE.toLowerCase(), titleAndPrice[1]);
 				}
 
-				// Add the map to the list
-				menuItems3.add(menuItem);
 			}
 
 			WebElement FunnelCakeSection = driver.findElement(By.cssSelector("section[data-id='6b1a6db3']"));
 
-			WebElement FunnelCakeDiv = FunnelCakeSection
-					.findElement(By.cssSelector(".elementor-section .elementor-heading-title"));
-			bw.write(Constants.TITLE + FunnelCakeDiv.getText());
-			bw.newLine();
-
+			WebElement FunnelCakeDiv = FunnelCakeSection.findElement(By.cssSelector(".elementor-section .elementor-heading-title"));
+			String heading  = FunnelCakeDiv.getText();
+			consoleOutput.append(Constants.TITLE).append(heading).append("\n");
+			
 			WebElement FunnelCakeDescriptionDiv = FunnelCakeSection.findElement(By.tagName("p"));
-			bw.write(Constants.DESCRIPTION + FunnelCakeDescriptionDiv.getText());
-			bw.newLine();
+			String description  = FunnelCakeDescriptionDiv.getText();
+			consoleOutput.append(Constants.DESCRIPTION).append(description).append("\n");
+
 
 			WebElement FunnelCakePriceDiv = FunnelCakeSection.findElement(By.cssSelector("[data-id='13641a41'] h2"));
-			bw.write(Constants.PRICE + FunnelCakePriceDiv.getText());
-			bw.newLine();
+			String price = FunnelCakePriceDiv.getText();
+			consoleOutput.append(Constants.PRICE).append(price).append("\n").append("---------------------").append("\n");
+			
+			String descriptionCSV = price.replace(",", ";");
+            csvOutput.append(String.format("%s,%s,%s\n", heading, price, descriptionCSV));
 
-			bw.write("-----------------------------------------------------------");
-			bw.newLine();
 
 			WebElement SidesDiv = driver.findElement(By.cssSelector("div[data-id='7ff01fb1']"));
-			bw.write(SidesDiv.findElement(By.tagName("h2")).getText());
-			bw.newLine();
-
+			String headingSide = SidesDiv.getText();
+			consoleOutput.append(headingSide + "\n-------------\n");
+			
 			WebElement SidesSec = driver.findElement(By.cssSelector("section[data-id='5d257a2d']"));
 
 			List<WebElement> h3Elements = SidesSec.findElements(
@@ -206,44 +180,51 @@ public class BurgerFactory {
 
 					String h3Text = h3Element.getText();
 					String pText = pElement.getText();
-
-					bw.write(Constants.TITLE + h3Text);
-					bw.newLine();
-					bw.write(Constants.DESCRIPTION + pText);
-					bw.newLine();
-					bw.write("----------");
-					bw.newLine();
+					String[] Sideprice = pText.split("\\$");
+					
+					String SidesDescriptionCSV = Sideprice[0].replaceAll("\n", " ").replace(",", ";");
+		            csvOutput.append(String.format("%s,%s,%s\n", h3Text, Sideprice[1], SidesDescriptionCSV));
+		            
+					consoleOutput.append(Constants.TITLE).append(h3Text).append("\n")
+	                .append(Constants.PRICE).append(Sideprice[1]).append("\n")
+	                .append(Constants.DESCRIPTION).append(Sideprice[0]).append("\n")
+	                .append("----------\n");
+					
 				}
 			} else {
-				bw.write("Mismatch in the number of h3 and p elements.");
+				System.out.println("error");
 			}
-
+//
 			WebElement MilkshakesDiv = driver.findElement(By.cssSelector("div[data-id='bfb945d']"));
-			bw.write(MilkshakesDiv.findElement(By.tagName("h2")).getText());
-			bw.newLine();
-			bw.write("-----------------------------------------------------------------------");
-			bw.newLine();
+			String milkshakeTitle  = MilkshakesDiv.findElement(By.tagName("h2")).getText();
+			consoleOutput.append(milkshakeTitle + "\n-------------\n");
 
 			WebElement MilkshakesPriceDiv = driver.findElement(By.cssSelector("div[data-id='213c5c53']"));
-			bw.write("Price for any flavored milkshake: " + MilkshakesPriceDiv.findElement(By.tagName("h2")).getText());
-			bw.newLine();
+			String milkshakePrice = MilkshakesPriceDiv.findElement(By.tagName("h2")).getText();
+			consoleOutput.append("Price for any flavored milkshake: ").append(milkshakePrice).append("\n");
 
-			List<WebElement> MilkshakesFlavoursDiv = driver
-					.findElements(By.cssSelector("section[data-id='23411114'] h3"));
-			bw.write("Flavors available for milkshakes are:");
-			bw.newLine();
+			List<WebElement> MilkshakesFlavoursDiv = driver.findElements(By.cssSelector("section[data-id='23411114'] h3"));
+			consoleOutput.append("Flavors available for milkshakes are:").append("\n");
+			
+//			String SidesDescriptionCSV = price.replace(",", ";");
+            csvOutput.append(String.format("%s,%s\n", milkshakeTitle, milkshakePrice));
+			
 			for (WebElement flavour : MilkshakesFlavoursDiv) {
-				bw.write(flavour.getText());
-				bw.newLine();
+				String flavoursOfMilkShake = flavour.getText(); 
+				consoleOutput.append(flavoursOfMilkShake).append("\n");
+
 			}
 
-			System.out.println("Data saved to file: " + filePath); // Confirm the data was saved to the file
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+			   Utilities.writeConsoleToFile(csvFilePath, csvOutput.toString());
+
+//			System.out.println("Data saved to file: " + filePath); // Confirm the data was saved to the file
+			   Utilities.writeConsoleToFile(txtFilePath, consoleOutput.toString());
+
+
+		
 
 		// Close the browser
 		driver.quit();
 
-	}
-}
+}}
+
