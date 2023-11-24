@@ -4,6 +4,10 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This class consists of all the necessary and common non-featural methods that
@@ -31,6 +35,26 @@ public class Utilities {
             e.printStackTrace();
         }
     }
+	
+	public static String[][] convertCSVToStringArray(String filePath) {
+		List<String[]> dataList = new ArrayList<>();
+
+		try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+			String line;
+			while ((line = br.readLine()) != null) {
+				String[] values = line.split(",");
+				dataList.add(values);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		// Convert List<String[]> to String[][]
+		String[][] dataArray = new String[dataList.size()][];
+		dataList.toArray(dataArray);
+
+		return dataArray;
+	}
     
     
 
