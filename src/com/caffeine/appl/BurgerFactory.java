@@ -17,7 +17,7 @@ import com.caffeine.manager.Utilities;
 public class BurgerFactory {
 	public static void main(String[] args) {
 
-		String filePath = Utilities.getFilePath(Constants.FILE_NAME_PATH_PREFIX, "BurgerFactory.txt");
+		String filePath = Utilities.getFilePath(Constants.FILE_NAME_PATH_PREFIX, "BurgerFactory.txt", true);
 
 		// Create a new instance of the Chrome driver
 		WebDriver driver = new ChromeDriver();

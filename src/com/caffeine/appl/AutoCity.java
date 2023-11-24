@@ -19,7 +19,7 @@ public class AutoCity {
 
 		driver.get(Constants.AUTOCITY_URL);
 
-		String filePath = Utilities.getFilePath(Constants.FILE_NAME_PATH_PREFIX, "AutoCity.txt");
+		String filePath = Utilities.getFilePath(Constants.FILE_NAME_PATH_PREFIX, "AutoCity.txt", true);
 	   
 	   try {
            Thread.sleep(5000); // waiting for the output to come based on the input and also change the time according to your requirement

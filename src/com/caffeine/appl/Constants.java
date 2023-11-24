@@ -11,6 +11,10 @@ public class Constants{
 	public static final String TITLE = "Title: ";
 	public static final String DESCRIPTION = "Description: ";
 	public static final String PRICE = "Price: ";
+	public static final String CSV_EXTENSION = ".csv";
+	
+	public static final String WORD_COUNTS_FILE = "word_counts.csv";
+	public static final String ERROR_MESSAGE = "ERROR OCCURRED ";
 
 	
 }

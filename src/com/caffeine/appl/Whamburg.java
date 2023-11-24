@@ -16,7 +16,7 @@ import com.caffeine.manager.Utilities;
 public class Whamburg {
 	public static void main(String[] args) {
 
-		String filePath = Utilities.getFilePath(Constants.FILE_NAME_PATH_PREFIX, "Whamburg.txt");
+		String filePath = Utilities.getFilePath(Constants.FILE_NAME_PATH_PREFIX, "Whamburg.txt", true);
 
 		try (BufferedWriter bw = new BufferedWriter(new FileWriter(filePath))) {
 
