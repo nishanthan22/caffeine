@@ -1,5 +1,4 @@
 package WordNSearch;
-
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -112,17 +111,22 @@ public class CafePriceAnalysis {
                 if (data.length >= 3) {
                     String cafeName = data[0].trim();
                     String foodOption = data[1].trim();
-                    double price = Double.parseDouble(data[2].trim());
+                    try {
+                        double price = Double.parseDouble(data[2].trim());
 
-                    // Add data to word completion trie and inverted index
-                    wordCompletionTrie.insert(foodOption);
-                    invertedIndex.put(foodOption.toLowerCase(), new CafeCategory(foodOption, price));
+                        // Add data to word completion trie and inverted index
+                        wordCompletionTrie.insert(foodOption);
+                        invertedIndex.put(foodOption.toLowerCase(), new CafeCategory(foodOption, price));
 
-                    // Add data to cafes
-                    cafes.computeIfAbsent(cafeName, k -> new Cafe()).addCategory(foodOption, price);
+                        // Add data to cafes
+                        cafes.computeIfAbsent(cafeName, k -> new Cafe()).addCategory(foodOption, price);
+                    } catch (NumberFormatException e) {
+                        // Handle the case where the price is not a valid double
+                        System.err.println("Invalid price format for " + foodOption + " in cafe " + cafeName);
+                    }
                 }
             }
-        } catch (IOException | NumberFormatException e) {
+        } catch (IOException e) {
             e.printStackTrace();
             System.err.println("Error loading data from CSV file.");
         }
@@ -139,10 +143,17 @@ public class CafePriceAnalysis {
     }
 
     public void displayCategoriesWithPrices(String userInput) {
-        CafeCategory category = invertedIndex.get(userInput.toLowerCase());
+        String lowerCaseInput = userInput.toLowerCase();
+
+        // Try to find a partial match
+        CafeCategory category = invertedIndex.values().stream()
+                .filter(cat -> cat.getName().toLowerCase().contains(lowerCaseInput))
+                .findFirst()
+                .orElse(null);
+
         if (category != null) {
             System.out.println("Category: " + category.getName() + ", Price: " + category.getPrice());
-            findLowestPrice(userInput);
+            findLowestPrice(category.getName());
         } else {
             System.out.println("No results found for " + userInput);
         }
