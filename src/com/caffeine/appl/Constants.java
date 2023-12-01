@@ -1,7 +1,5 @@
 package com.caffeine.appl;
 
-import com.caffeine.manager.Utilities;
-
 public class Constants {
 
 	public static final String BURGERFACTORY_URL = "https://burgerfactory.ca/our-menu/";
@@ -22,6 +20,6 @@ public class Constants {
 	public static final String BURGER_FACTORY_FILE = "BurgerFactory";
 	public static final String WHAMBURG_FILE = "Whamburg";
 
-	public static final String CSV_FILE_NAME = "cafe_data.csv";
+	public static final String CAFE_DATA_FILE = "cafe_data.csv";
 
 }
