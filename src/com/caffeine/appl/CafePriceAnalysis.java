@@ -1,8 +1,13 @@
-package WordNSearch;
+package com.caffeine.appl;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
+
+import com.caffeine.manager.Features;
+import com.caffeine.manager.Utilities;
+
 
 class TrieNode {
     Map<Character, TrieNode> children;
@@ -76,18 +81,19 @@ class CafeCategory {
 }
 
 class Cafe {
-    private Map<String, CafeCategory> menu;
+    private Map<String, List<CafeCategory>> menu;
 
     public Cafe() {
         this.menu = new HashMap<>();
     }
 
     public void addCategory(String name, double price) {
-        menu.put(name.toLowerCase(), new CafeCategory(name, price));
+        menu.computeIfAbsent(name.toLowerCase(), k -> new ArrayList<>())
+            .add(new CafeCategory(name, price));
     }
 
-    public CafeCategory getCategory(String name) {
-        return menu.get(name.toLowerCase());
+    public List<CafeCategory> getCategories(String name) {
+        return menu.getOrDefault(name.toLowerCase(), Collections.emptyList());
     }
 }
 
@@ -100,7 +106,7 @@ public class CafePriceAnalysis {
         wordCompletionTrie = new Trie();
         invertedIndex = new HashMap<>();
         cafes = new HashMap<>();
-        initializeDataFromCSV("cafe_data.csv"); // Specify your CSV file name
+        initializeDataFromCSV(Utilities.getFilePath(Constants.FILE_NAME_PATH_PREFIX, Constants.CSV_FILE_NAME, true)); // Specify your CSV file name
     }
 
     private void initializeDataFromCSV(String fileName) {
@@ -132,12 +138,6 @@ public class CafePriceAnalysis {
         }
     }
 
-    public boolean validateInput(String userInput) {
-        // Example: Only allow letters and spaces
-        String pattern = "^[a-zA-Z ]+$";
-        return userInput.matches(pattern);
-    }
-
     public List<String> wordCompletion(String partialWord) {
         return wordCompletionTrie.searchCompletions(partialWord);
     }
@@ -159,23 +159,39 @@ public class CafePriceAnalysis {
         }
     }
 
-    public void findLowestPrice(String category) {
-        double lowestPrice = Double.MAX_VALUE;
-        String lowestPriceCafe = "";
+    public void findLowestPrice(String dishName) {
+        List<String> cafesWithCategory = new ArrayList<>();
 
-        for (Cafe cafe : cafes.values()) {
-            CafeCategory cafeCategory = cafe.getCategory(category);
-            if (cafeCategory != null && cafeCategory.getPrice() < lowestPrice) {
-                lowestPrice = cafeCategory.getPrice();
-                lowestPriceCafe = cafeCategory.getName();
-            }
-        }
+        cafes.forEach((cafeName, cafe) -> {
+            cafe.getCategories(dishName).forEach(cafeCategory -> {
+                System.out.println("Category: " + cafeCategory.getName() +
+                        ", Price: " + cafeCategory.getPrice() +
+                        " from " + cafeName);
+                cafesWithCategory.add(cafeName);
+            });
+        });
 
-        if (!lowestPriceCafe.isEmpty()) {
-            System.out.println("Lowest Price: " + lowestPrice + " from " + lowestPriceCafe);
+
+        if (!cafesWithCategory.isEmpty()) {
+            double lowestPrice = cafesWithCategory.stream()
+                    .map(cafeKey -> cafes.get(cafeKey).getCategories(dishName))
+                    .flatMap(List::stream)
+                    .mapToDouble(CafeCategory::getPrice)
+                    .min()
+                    .orElse(Double.MAX_VALUE);
+
+            List<String> cafesWithLowestPrice = cafesWithCategory.stream()
+                    .filter(cafeKey ->
+                            cafes.get(cafeKey).getCategories(dishName).stream()
+                                    .anyMatch(category -> category.getPrice() == lowestPrice)
+                    )
+                    .toList();
+
+            System.out.println("Here's the Best Deal for you! " + lowestPrice + " from " + cafesWithLowestPrice);
         } else {
-            System.out.println("No prices found for " + category);
+            System.out.println("No prices found for " + dishName);
         }
+
     }
 
     public static void main(String[] args) {
@@ -187,7 +203,7 @@ public class CafePriceAnalysis {
         String userInput = scanner.nextLine();
 
         if (userInput != null && !userInput.isEmpty()) {
-            if (cafePriceAnalysis.validateInput(userInput)) {
+            if (Features.validateInput(userInput)) {
                 List<String> completions = cafePriceAnalysis.wordCompletion(userInput);
                 if (!completions.isEmpty()) {
                     System.out.println("Did you mean: " + completions);

@@ -1,5 +1,7 @@
 package com.caffeine.appl;
 
+import com.caffeine.manager.Utilities;
+
 public class Constants {
 
 	public static final String BURGERFACTORY_URL = "https://burgerfactory.ca/our-menu/";
@@ -15,5 +17,7 @@ public class Constants {
 
 	public static final String WORD_COUNTS_FILE = "word_counts.csv";
 	public static final String ERROR_MESSAGE = "ERROR OCCURRED ";
+	
+	public static final String CSV_FILE_NAME = "cafe_data.csv";
 
 }
