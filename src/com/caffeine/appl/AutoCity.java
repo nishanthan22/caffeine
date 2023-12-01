@@ -43,7 +43,7 @@ public class AutoCity {
 				WebElement descriptionElement = product
 						.findElement(By.cssSelector(".kv-ee-accent-border .kv-ee-body--sm"));
 				String description = descriptionElement.getText();
-				String descriptionCSV = descriptionElement.getText().replace(",", ";");
+				String descriptionCSV = descriptionElement.getText().replace(",", "|");
 
 				csvOutput.append(String.format("%s,%s,%s\n", title, price, descriptionCSV));
 
@@ -68,7 +68,7 @@ public class AutoCity {
 				String price = priceElement.getText();
 				String description = descriptionElement.getText();
 
-				String descriptionCSV = descriptionElement.getText().replace(",", ";");
+				String descriptionCSV = descriptionElement.getText().replace(",", "|");
 				csvOutput.append(String.format("%s,%s,%s\n", title, price, descriptionCSV));
 
 				// Write the extracted details to the file
@@ -93,7 +93,7 @@ public class AutoCity {
 				String price = priceElement.getText();
 				String description = descriptionElement.getText();
 
-				String descriptionCSV = descriptionElement.getText().replace(",", ";");
+				String descriptionCSV = descriptionElement.getText().replace(",", "|");
 				csvOutput.append(String.format("%s,%s,%s\n", title, price, descriptionCSV));
 
 				// Write the extracted details to the file
@@ -118,7 +118,7 @@ public class AutoCity {
 				String price = priceElement.getText();
 				String description = descriptionElement.getText();
 
-				String descriptionCSV = descriptionElement.getText().replace(",", ";");
+				String descriptionCSV = descriptionElement.getText().replace(",", "|");
 				csvOutput.append(String.format("%s,%s,%s\n", title, price, descriptionCSV));
 
 				// Write the extracted details to the file
@@ -143,7 +143,7 @@ public class AutoCity {
 				String price = priceElement.getText();
 				String description = descriptionElement.getText();
 
-				String descriptionCSV = description.replaceAll("\n", " ").replace(",", ";");
+				String descriptionCSV = description.replaceAll("\n", " ").replace(",", "|");
 				csvOutput.append(String.format("%s,%s,%s\n", title, price, descriptionCSV));
 
 				// Write the extracted details to the file
@@ -169,7 +169,7 @@ public class AutoCity {
 				String price = priceElement.getText();
 				String description = descriptionElement.getText();
 
-				String descriptionCSV = descriptionElement.getText().replace(",", ";");
+				String descriptionCSV = descriptionElement.getText().replace(",", "|");
 				csvOutput.append(String.format("%s,%s,%s\n", title, price, descriptionCSV));
 
 				// Write the extracted details to the file

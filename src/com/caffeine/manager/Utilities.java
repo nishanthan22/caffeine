@@ -7,7 +7,10 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import javax.management.InvalidAttributeValueException;
 
@@ -115,6 +118,20 @@ public class Utilities {
 		dataList.toArray(dataArray);
 
 		return dataArray;
+	}
+
+	public static <K, V extends Comparable<? super V>> Map<K, V> sortData(Map<K, V> map) {
+		List<Map.Entry<K, V>> list = new LinkedList<>(map.entrySet());
+
+		// Sorting the list by values using a Comparator
+		list.sort(Map.Entry.comparingByValue());
+
+		// Storing the sorted entries in a LinkedHashMap
+		Map<K, V> sortedByValue = new LinkedHashMap<>();
+		for (Map.Entry<K, V> entry : list)
+			sortedByValue.put(entry.getKey(), (V) ("$" + entry.getValue()));
+
+		return sortedByValue;
 	}
 
 }
