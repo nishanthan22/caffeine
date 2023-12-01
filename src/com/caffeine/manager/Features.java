@@ -105,4 +105,9 @@ public class Features {
 		return searchFrequency;
 
 	}
+	
+	 public static boolean validateInput(String userInput) {
+	        String pattern = "^[a-zA-Z ]+$";
+	        return userInput.matches(pattern);
+	 }
 }
