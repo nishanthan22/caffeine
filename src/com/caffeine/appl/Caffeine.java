@@ -1,6 +1,8 @@
 package com.caffeine.appl;
 
-import com.caffeine.manager.Features;
+import java.util.Scanner;
+
+import com.caffeine.manager.Features2;
 
 /**
  * This class is the Main application class of this project
@@ -13,7 +15,12 @@ public class Caffeine {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		System.out.println("Welcome Everyone, ACC Project Codebase");
-		Features.spellChecker();
+		// Features.spellChecker();
+		Scanner sc=new Scanner(System.in);
+		System.out.println("Enter a dish: ");
+		String dish=sc.nextLine();
+		
+		Features2.freqCount(dish);
 	}
 
 }

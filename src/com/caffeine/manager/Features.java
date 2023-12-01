@@ -124,6 +124,7 @@ public class Features {
 
 	}
 
+
 	/* FINDING PATTERNS USING REGEX */
 
 	public static Map<String, Double> retrieveDataByPattern(String word) throws Exception {
@@ -166,4 +167,9 @@ public class Features {
 
 	}
 
+	
+	 public static boolean validateInput(String userInput) {
+	        String pattern = "^[a-zA-Z ]+$";
+	        return userInput.matches(pattern);
+	 }
 }
