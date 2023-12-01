@@ -47,7 +47,7 @@ public class Whamburg {
 			WebElement priceElement = thirdDiv.get(i).findElement(By.cssSelector("span"));
 			String priceText = priceElement.getText();
 
-			String descriptionCSV = descElement.getText().replace(",", ";");
+			String descriptionCSV = descElement.getText().replace(",", "|");
 			csvOutput.append(String.format("%s,%s,%s\n", titleText, priceText, descriptionCSV));
 
 			consoleOutput.append(Constants.TITLE).append(titleText).append("\n").append(Constants.PRICE)
@@ -77,7 +77,7 @@ public class Whamburg {
 			WebElement bsProductPrice = bsThirdDiv.get(i).findElement(By.cssSelector("span"));
 			String bsPriceText = bsProductPrice.getText();
 
-			String descriptionCSV = bsDesc.getText().replace(",", ";");
+			String descriptionCSV = bsDesc.getText().replace(",", "|");
 			csvOutput.append(String.format("%s,%s,%s\n", bsTitleText, bsPriceText, descriptionCSV));
 
 			// Create an array to hold description and price
@@ -107,7 +107,7 @@ public class Whamburg {
 			WebElement friesProductPrice = friesThirdDiv.get(i).findElement(By.cssSelector("span"));
 			String friesPriceText = friesProductPrice.getText();
 
-			String descriptionCSV = friesDesc.getText().replace(",", ";");
+			String descriptionCSV = friesDesc.getText().replace(",", "|");
 			csvOutput.append(String.format("%s,%s,%s\n", friesTitleText, friesPriceText, descriptionCSV));
 
 			consoleOutput.append(Constants.TITLE).append(friesTitleText).append("\n").append(Constants.PRICE)
@@ -137,7 +137,7 @@ public class Whamburg {
 			WebElement dessertProductPrice = dessertThirdDiv.get(i).findElement(By.cssSelector("span"));
 			String dessertPriceText = dessertProductPrice.getText();
 
-			String descriptionCSV = dessertDesc.getText().replace(",", ";");
+			String descriptionCSV = dessertDesc.getText().replace(",", "|");
 			csvOutput.append(String.format("%s,%s,%s\n", dessertTitleText, dessertPriceText, descriptionCSV));
 
 			// Create an array to hold description and price
@@ -203,7 +203,7 @@ public class Whamburg {
 			WebElement shakesProductPrice = shakesThirdDiv.get(i).findElement(By.cssSelector("span"));
 			String shakesPriceText = shakesProductPrice.getText();
 
-			String descriptionCSV = shakesDesc.getText().replace(",", ";");
+			String descriptionCSV = shakesDesc.getText().replace(",", "|");
 			csvOutput.append(String.format("%s,%s\n", shakesTitleText, shakesPriceText, descriptionCSV));
 
 			consoleOutput.append(Constants.TITLE).append(shakesTitleText).append("\n").append(Constants.PRICE)

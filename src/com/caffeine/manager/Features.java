@@ -1,17 +1,32 @@
 package com.caffeine.manager;
 
+import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.management.InvalidAttributeValueException;
 
 import com.caffeine.appl.BinarySearchTree;
 import com.caffeine.appl.Constants;
+import com.opencsv.CSVReader;
 
 public class Features {
 	// In this class we can start implementing the features
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		try {
+			retrieveDataByPattern("poutine");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
 	/* SPELL CHECKER */
 	public static void spellChecker() {
@@ -20,13 +35,16 @@ public class Features {
 		List<String[]> csvDataList = new ArrayList<>();
 
 		// Insert words into the dictionary
-		String AutoCityPath = Utilities.getFilePath(Constants.FILE_NAME_PATH_PREFIX, "AutoCity.csv", true);
+		String AutoCityPath = Utilities.getFilePath(Constants.FILE_NAME_PATH_PREFIX,
+				Constants.AUTO_CITY_FILE.concat(Constants.CSV_EXTENSION), true);
 		csvDataList.addAll(Arrays.asList(Utilities.convertCSVToStringArray(AutoCityPath)));
 
-		String BurgerFactoryPath = Utilities.getFilePath(Constants.FILE_NAME_PATH_PREFIX, "BurgerFactory.csv", true);
+		String BurgerFactoryPath = Utilities.getFilePath(Constants.FILE_NAME_PATH_PREFIX,
+				Constants.BURGER_FACTORY_FILE.concat(Constants.CSV_EXTENSION), true);
 		csvDataList.addAll(Arrays.asList(Utilities.convertCSVToStringArray(BurgerFactoryPath)));
 
-		String WhamburgPath = Utilities.getFilePath(Constants.FILE_NAME_PATH_PREFIX, "Whamburg.csv", true);
+		String WhamburgPath = Utilities.getFilePath(Constants.FILE_NAME_PATH_PREFIX,
+				Constants.WHAMBURG_FILE.concat(Constants.CSV_EXTENSION), true);
 		csvDataList.addAll(Arrays.asList(Utilities.convertCSVToStringArray(WhamburgPath)));
 
 		String[][] csvData = csvDataList.toArray(new String[0][]);
@@ -62,11 +80,11 @@ public class Features {
 			if (!inputWordList.isEmpty() || !suggestionList.isEmpty()) {
 				System.out.println("Suggestions:" + "Did you mean".toUpperCase());
 				int prntIdx = 1;
-				for (List<String> list : List.of(inputWordList, suggestionList)) 
+				for (List<String> list : List.of(inputWordList, suggestionList))
 					for (int i = 0; i < list.size(); i++) {
 						System.out.println(prntIdx + ") " + list.get(i));
 						prntIdx++;
-					}  
+					}
 			} else
 				System.out.println("No words found matching the word you have entered");
 
@@ -105,4 +123,47 @@ public class Features {
 		return searchFrequency;
 
 	}
+
+	/* FINDING PATTERNS USING REGEX */
+
+	public static Map<String, Double> retrieveDataByPattern(String word) throws Exception {
+		Map<String, Double> productData = new HashMap<>();
+
+		List<String> filesList = Arrays.asList(Constants.AUTO_CITY_FILE.concat(Constants.CSV_EXTENSION),
+				Constants.BURGER_FACTORY_FILE.concat(Constants.CSV_EXTENSION),
+				Constants.WHAMBURG_FILE.concat(Constants.CSV_EXTENSION));
+		String[] line = null;
+		for (String file : filesList) {
+			try {
+				String filePath = Utilities.getFilePath(Constants.FILE_NAME_PATH_PREFIX, file, true);
+				CSVReader reader = new CSVReader(new FileReader(filePath));
+
+				Pattern pattern = Pattern.compile("\\b" + word + "\\b", Pattern.CASE_INSENSITIVE);
+
+				while ((line = reader.readNext()) != null) {
+					line.toString().replace(";", "|");
+					for (String item : line) {
+						Matcher matcher = pattern.matcher(item);
+						if (matcher.find() && line.length > 1) {
+							String data = line[1];
+							if (data.contains("$")) 
+								data = data.replace("$", "").substring(0, 3);
+							productData.put(item, Double.parseDouble(data));
+							break;
+						}
+					}
+				}
+			} catch (Exception e) {
+				e.getMessage();
+			}
+
+		}
+
+		if (!productData.isEmpty())
+			productData = Utilities.sortData(productData);
+		System.out.println(productData);
+		return productData;
+
+	}
+
 }
