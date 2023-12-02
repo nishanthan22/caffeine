@@ -18,15 +18,6 @@ import com.opencsv.CSVReader;
 
 public class Features {
 	// In this class we can start implementing the features
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		try {
-			retrieveDataByPattern("poutine");
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
 
 	/* SPELL CHECKER */
 	public static void spellChecker() {
@@ -123,9 +114,9 @@ public class Features {
 		return searchFrequency;
 
 	}
-	
-	/*VALIDATING THE PRICE FORMAT WITH REGEX*/
-	
+
+	/* VALIDATING THE PRICE FORMAT WITH REGEX */
+
 	public static List<String> validatePrices(String data) {
 		List<String> results = new ArrayList<>();
 		String[] lines = data.split("\n");
@@ -166,28 +157,28 @@ public class Features {
 		// Check if the price matches the pattern
 		return matcher.matches();
 	}
-	
+
 	public static boolean areAllValid(List<String> results) {
-        for (String result : results) {
-            if (!result.equals("Valid")) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-
+		for (String result : results) {
+			if (!result.equals("Valid")) {
+				return false;
+			}
+		}
+		return true;
+	}
 
 	/* FINDING PATTERNS USING REGEX */
 
 	public static Map<String, Double> retrieveDataByPattern(String word) throws Exception {
 		Map<String, Double> productData = new HashMap<>();
 
-		List<String> filesList = Arrays.asList(Constants.AUTO_CITY_FILE, Constants.BURGER_FACTORY_FILE, Constants.WHAMBURG_FILE);
+		List<String> filesList = Arrays.asList(Constants.AUTO_CITY_FILE, Constants.BURGER_FACTORY_FILE,
+				Constants.WHAMBURG_FILE);
 		String[] line = null;
 		for (String file : filesList) {
 			try {
-				String filePath = Utilities.getFilePath(Constants.FILE_NAME_PATH_PREFIX, file.concat(Constants.CSV_EXTENSION), true);
+				String filePath = Utilities.getFilePath(Constants.FILE_NAME_PATH_PREFIX,
+						file.concat(Constants.CSV_EXTENSION), true);
 				CSVReader reader = new CSVReader(new FileReader(filePath));
 
 				Pattern pattern = Pattern.compile("\\b" + word + "\\b", Pattern.CASE_INSENSITIVE);
@@ -198,7 +189,7 @@ public class Features {
 						Matcher matcher = pattern.matcher(item);
 						if (matcher.find() && line.length > 1) {
 							String data = line[1];
-							if (data.contains("$")) 
+							if (data.contains("$"))
 								data = data.replace("$", "").substring(0, 3);
 							productData.put(file + ":" + item, Double.parseDouble(data));
 							break;
@@ -207,18 +198,29 @@ public class Features {
 				}
 			} catch (Exception e) {
 				e.getMessage();
-			}}
+			}
+		}
 		System.out.println(productData);
 		Utilities.generateFinalCSVFile(productData);
 		return productData;
 
+	}
+
+	public static void displayFrequentlySearched() {
+		List<String> wordsList = new ArrayList<>();
+		String[][] words = Utilities.convertCSVToStringArray(
+				Utilities.getFilePath(Constants.FILE_NAME_PATH_PREFIX, Constants.WORD_COUNTS_FILE, false));
+		for (int i = 0; i < words.length; i++) {
+			List<String> firstArrayElements = Arrays.asList(words[i]);
+			wordsList.add(firstArrayElements.get(0));
 		}
+		wordsList.remove(0);
+		System.out.println("Words List: " + wordsList);
 
+	}
 
-
-	
-	 public static boolean validateInput(String userInput) {
-	        String pattern = "^[a-zA-Z ]+$";
-	        return userInput.matches(pattern);
-	 }
+	public static boolean validateInput(String userInput) {
+		String pattern = "^[a-zA-Z ]+$";
+		return userInput.matches(pattern);
+	}
 }

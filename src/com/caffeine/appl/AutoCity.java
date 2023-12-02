@@ -11,7 +11,7 @@ import com.caffeine.manager.Features;
 import com.caffeine.manager.Utilities;
 
 public class AutoCity {
-	public static void main(String[] args) {
+	public AutoCity() {
 		// Set the path to your ChromeDriver
 
 		WebDriver driver = new ChromeDriver();

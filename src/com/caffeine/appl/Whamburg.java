@@ -11,7 +11,7 @@ import com.caffeine.manager.Features;
 import com.caffeine.manager.Utilities;
 
 public class Whamburg {
-	public static void main(String[] args) {
+	public Whamburg() {
 
 		WebDriver driver = new ChromeDriver();
 
