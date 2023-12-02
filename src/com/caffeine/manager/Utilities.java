@@ -11,6 +11,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.management.InvalidAttributeValueException;
 
@@ -133,5 +134,60 @@ public class Utilities {
 
 		return sortedByValue;
 	}
+
+	public static void generateFinalCSVFile(Map<String, Double> productData) {
+		String csvFilePath = getFilePath(Constants.FILE_NAME_PATH_PREFIX,
+				Constants.COMPARABLE_FILE.concat(Constants.CSV_EXTENSION), true);
+
+		try {
+			// Initialize CSVWriter
+			CSVWriter writer = new CSVWriter(new FileWriter(csvFilePath));
+
+			// Write entries from the map to the CSV file
+			for (Entry<String, Double> entry : productData.entrySet()) {
+
+				String fileName = "";
+				if (entry.getKey().contains(":")) {
+					String[] temp = entry.getKey().split(":");
+					fileName = temp[0];
+
+					String[] record = { fileName, temp[1], String.valueOf(entry.getValue()) };
+					writer.writeNext(record);
+				}
+			}
+
+			// Close the writer
+			writer.close();
+
+			System.out.println("Data has been written to " + csvFilePath);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+	}
+	public static void printPattern(String text, String delimeter, boolean separateLine) {
+
+		int length = text.length() + 4;
+		StringBuilder pattern = new StringBuilder();
+
+		for (int i = 0; i < length; i++) {
+			pattern.append(delimeter);
+		}
+
+		if (separateLine) {
+			System.out.println(Constants.ANSI_CYAN + Constants.ANSI_BOLD + pattern + Constants.ANSI_RESET);
+			System.out.println(Constants.ANSI_PURPLE + Constants.ANSI_BOLD + delimeter + text + "  " + delimeter
+					+ Constants.ANSI_RESET);
+			System.out.println(Constants.ANSI_CYAN + Constants.ANSI_BOLD + pattern + Constants.ANSI_RESET);
+		} else
+			System.out.println(delimeter + text + delimeter + Constants.ANSI_RESET);
+	}
+
+	public static void printPatternWithLength(int n, String delimeter) {
+		for (int i = 0; i < n + 4; i++)
+			System.out.print(Constants.ANSI_CYAN + delimeter + Constants.ANSI_RESET);
+		System.out.println();
+	}
+
 
 }

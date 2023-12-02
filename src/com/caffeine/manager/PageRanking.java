@@ -18,7 +18,7 @@ import java.util.LinkedList;
 
 //frequency count and page ranking feature
 
-public class Features2 {
+public class PageRanking {
 	
 	//frequency count feature
 	

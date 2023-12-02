@@ -16,11 +16,24 @@ public class Constants {
 
 	public static final String WORD_COUNTS_FILE = "word_counts.csv";
 	public static final String ERROR_MESSAGE = "ERROR OCCURRED ";
+	public static final String UNKNOWN_EXCEPTION = "UNKNOWN ERROR OCCURED ";
 
 	public static final String AUTO_CITY_FILE = "AutoCity";
 	public static final String BURGER_FACTORY_FILE = "BurgerFactory";
 	public static final String WHAMBURG_FILE = "Whamburg";
 
 	public static final String CAFE_DATA_FILE = "cafe_data.csv";
+	public static final String COMPARABLE_FILE = "comparable_file";
+	
+	public static final String UNDERSCORE = "_";
+	public static final String STAR = "*";
+	public static final String HYPHEN = "-";	
+	public static final String DOT = ".";
+	
+	public static final String ANSI_RESET = "\u001B[0m";
+	public static final String ANSI_CYAN = "\u001B[36m";
+	public static final String ANSI_YELLOW = "\u001B[33m";
+	public static final String ANSI_PURPLE = "\u001B[35m";
+	public static final String ANSI_BOLD = "\u001B[1m";
 
 }

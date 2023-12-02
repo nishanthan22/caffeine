@@ -177,18 +177,17 @@ public class Features {
     }
 
 
+
 	/* FINDING PATTERNS USING REGEX */
 
 	public static Map<String, Double> retrieveDataByPattern(String word) throws Exception {
 		Map<String, Double> productData = new HashMap<>();
 
-		List<String> filesList = Arrays.asList(Constants.AUTO_CITY_FILE.concat(Constants.CSV_EXTENSION),
-				Constants.BURGER_FACTORY_FILE.concat(Constants.CSV_EXTENSION),
-				Constants.WHAMBURG_FILE.concat(Constants.CSV_EXTENSION));
+		List<String> filesList = Arrays.asList(Constants.AUTO_CITY_FILE, Constants.BURGER_FACTORY_FILE, Constants.WHAMBURG_FILE);
 		String[] line = null;
 		for (String file : filesList) {
 			try {
-				String filePath = Utilities.getFilePath(Constants.FILE_NAME_PATH_PREFIX, file, true);
+				String filePath = Utilities.getFilePath(Constants.FILE_NAME_PATH_PREFIX, file.concat(Constants.CSV_EXTENSION), true);
 				CSVReader reader = new CSVReader(new FileReader(filePath));
 
 				Pattern pattern = Pattern.compile("\\b" + word + "\\b", Pattern.CASE_INSENSITIVE);
@@ -201,23 +200,21 @@ public class Features {
 							String data = line[1];
 							if (data.contains("$")) 
 								data = data.replace("$", "").substring(0, 3);
-							productData.put(item, Double.parseDouble(data));
+							productData.put(file + ":" + item, Double.parseDouble(data));
 							break;
 						}
 					}
 				}
 			} catch (Exception e) {
 				e.getMessage();
-			}
+			}}
+		System.out.println(productData);
+		Utilities.generateFinalCSVFile(productData);
+		return productData;
 
 		}
 
-		if (!productData.isEmpty())
-			productData = Utilities.sortData(productData);
-		System.out.println(productData);
-		return productData;
 
-	}
 
 	
 	 public static boolean validateInput(String userInput) {
