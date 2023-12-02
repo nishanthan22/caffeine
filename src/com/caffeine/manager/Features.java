@@ -174,8 +174,10 @@ public class Features {
 				String filePath = Utilities.getFilePath(Constants.FILE_NAME_PATH_PREFIX,
 						file.concat(Constants.CSV_EXTENSION), true);
 				CSVReader reader = new CSVReader(new FileReader(filePath));
-
-				Pattern pattern = Pattern.compile("\\b" + word + "\\b", Pattern.CASE_INSENSITIVE);
+				// Escape user input to handle special regex characters
+		        String escapedInput = Pattern.quote(word);
+		        String regexPattern = "\\b(" + escapedInput + "\\w*)\\b";
+				Pattern pattern = Pattern.compile(regexPattern, Pattern.CASE_INSENSITIVE);
 
 				while ((line = reader.readNext()) != null) {
 					line.toString().replace(";", "|");
@@ -194,7 +196,8 @@ public class Features {
 				e.getMessage();
 			}
 		}
-		Utilities.generateFinalCSVFile(productData);
+		if(!productData.isEmpty())
+			Utilities.generateFinalCSVFile(productData);
 		return productData;
 
 	}

@@ -15,24 +15,25 @@ public class Caffeine {
 
 	public static void main(String[] args) {
 
-		String welcomeMsg = " Welcome to Caffeine, A price analysis app";
-		try (Scanner userInput = new Scanner(System.in)) {
-
+		
+			 /* LOCAL VARIABLES */
+			String welcomeMsg = " Welcome to Caffeine, A price analysis app";
+			Scanner userInput = new Scanner(System.in);
 			int userChoice = 0;
 			boolean restartSwitch = false;
 			String[] options = { "1) Get the best/latest deals", "2) Find best restaurant for the dish",
 					"3) Advanced search", "4) Exit" };
+			
+			/* CONSOLE STYLING */
 			System.out.println("\t");
-			// Display welcome message
 			Utilities.printPattern(welcomeMsg, Constants.HYPHEN, true);
-			// Display options
 			for (String option : options)
 				Utilities.printPattern(option, Constants.HYPHEN, false);
 
 			do {
 				restartSwitch = false; // Reset the flag before re-entering the switch
-
 				try {
+					
 					Utilities.printPatternWithLength(welcomeMsg.length(), Constants.UNDERSCORE);
 					System.out.print("Enter the choice: ");
 					userChoice = userInput.nextInt();
@@ -64,9 +65,10 @@ public class Caffeine {
 					break;
 				}
 			} while (userChoice != 4 || restartSwitch);
+			userInput.close();
 		}
 
-	}
+	
 
 	private static void findBestCafe() {
 		System.out.println("Enter your dish to get your options..");
@@ -109,6 +111,7 @@ public class Caffeine {
 		}
 	}
 
+	@SuppressWarnings("unused")
 	private static void getBestOrLatestDeals() {
 
 		Scanner userInput = new Scanner(System.in);
