@@ -7,12 +7,24 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 
+import com.caffeine.manager.Features;
 import com.caffeine.manager.Utilities;
 
 public class BurgerFactory {
 	public static void main(String[] args) {
 
-		String txtFilePath = Utilities.getFilePath(Constants.FILE_NAME_PATH_PREFIX, "BurgerFactory.txt", true); // true value is passed to save the file in the parent directory
+		String txtFilePath = Utilities.getFilePath(Constants.FILE_NAME_PATH_PREFIX, "BurgerFactory.txt", true); // true
+																												// value
+																												// is
+																												// passed
+																												// to
+																												// save
+																												// the
+																												// file
+																												// in
+																												// the
+																												// parent
+																												// directory
 		String csvFilePath = Utilities.getFilePath(Constants.FILE_NAME_PATH_PREFIX, "BurgerFactory.csv", true);
 
 		// Create a new instance of the Chrome driver
@@ -47,11 +59,12 @@ public class BurgerFactory {
 			String description = burgerDetailsElement.getText();
 			String[] price = description.split("\\$");
 
-			String descriptionCSV = price[0].replaceAll("\n", " ").replace(",", "|");
-			csvOutput.append(String.format("%s,%s,%s\n", title, price[1], descriptionCSV));
+			String descriptionCSV = price[0].replaceAll("\n", " ").replace(",", ";");
+			csvOutput.append(String.format("%s,%s,%s\n", title, "$" + price[1], descriptionCSV));
 			// Writing to the file
-			consoleOutput.append(Constants.TITLE).append(title).append("\n").append(Constants.PRICE).append(price[1])
-					.append("\n").append(Constants.DESCRIPTION).append(price[0]).append("\n").append("----------\n");
+			consoleOutput.append(Constants.TITLE).append(title).append("\n").append(Constants.PRICE)
+					.append("$" + price[1]).append("\n").append(Constants.DESCRIPTION).append(price[0]).append("\n")
+					.append("----------\n");
 		}
 
 		WebElement nestedH2Element = driver.findElement(By.cssSelector("div[data-id='57c69a8e']"));
@@ -70,20 +83,18 @@ public class BurgerFactory {
 			for (int i = 0; i < headingElements.size(); i++) {
 				String headingText = headingElements.get(i).getText();
 				String priceText = priceElements.get(i).getText();
-				String[] price = priceText.split("\\$");
+				String[] price = priceText.split("(\\$)");
 
-				String descriptionCSV = price[0].replaceAll("\n", " ").replace(",", "|");
-				csvOutput.append(String.format("%s,%s,%s\n", headingText, price[1], descriptionCSV));
+				String descriptionCSV = price[0].replaceAll("\n", " ").replace(",", ";");
+				csvOutput.append(String.format("%s,%s,%s\n", headingText, "$" + price[1], descriptionCSV));
 
 				consoleOutput.append(Constants.TITLE).append(headingText).append("\n").append(Constants.PRICE)
-						.append(price[1]).append("\n").append(Constants.DESCRIPTION).append(price[0]).append("\n")
+						.append("$" + price[1]).append("\n").append(Constants.DESCRIPTION).append(price[0]).append("\n")
 						.append("----------\n");
 			}
 
-//				// Add the map to the list
-//				menuItems1.add(menuItem);
 		}
-//
+
 		List<WebElement> additionalSections2 = driver.findElements(By.cssSelector("section[data-id='5f3b92ad']"));
 
 		for (WebElement section : additionalSections2) {
@@ -96,17 +107,17 @@ public class BurgerFactory {
 				String priceText = priceElements.get(i).getText();
 				String[] price = priceText.split("\\$");
 
-				String descriptionCSV = price[0].replaceAll("\n", " ").replace(",", "|");
-				csvOutput.append(String.format("%s,%s,%s\n", headingText, price[1], descriptionCSV));
+				String descriptionCSV = price[0].replaceAll("\n", " ").replace(",", ";");
+				csvOutput.append(String.format("%s,%s,%s\n", headingText, "$" + price[1], descriptionCSV));
 
 				consoleOutput.append(Constants.TITLE).append(headingText).append("\n").append(Constants.PRICE)
-						.append(price[1]).append("\n").append(Constants.DESCRIPTION).append(price[0]).append("\n")
+						.append("$" + price[1]).append("\n").append(Constants.DESCRIPTION).append(price[0]).append("\n")
 						.append("----------\n");
 			}
 
 		}
 
-//
+
 		List<WebElement> additionalSections3 = driver.findElements(By.cssSelector("section[data-id='17a6956c']"));
 
 		for (WebElement section : additionalSections3) {
@@ -119,11 +130,11 @@ public class BurgerFactory {
 				String priceText = priceElements.get(i).getText();
 				String[] price = priceText.split("\\$");
 
-				String descriptionCSV = price[0].replaceAll("\n", " ").replace(",", "|");
-				csvOutput.append(String.format("%s,%s,%s\n", headingText, price[1], descriptionCSV));
+				String descriptionCSV = price[0].replaceAll("\n", " ").replace(",", ";");
+				csvOutput.append(String.format("%s,%s,%s\n", headingText, "$" + price[1], descriptionCSV));
 
 				consoleOutput.append(Constants.TITLE).append(headingText).append("\n").append(Constants.PRICE)
-						.append(price[1]).append("\n").append(Constants.DESCRIPTION).append(price[0]).append("\n")
+						.append("$" + price[1]).append("\n").append(Constants.DESCRIPTION).append(price[0]).append("\n")
 						.append("----------\n");
 
 			}
@@ -139,13 +150,14 @@ public class BurgerFactory {
 
 		WebElement FunnelCakeDescriptionDiv = FunnelCakeSection.findElement(By.tagName("p"));
 		String description = FunnelCakeDescriptionDiv.getText();
+
 		consoleOutput.append(Constants.DESCRIPTION).append(description).append("\n");
 
 		WebElement FunnelCakePriceDiv = FunnelCakeSection.findElement(By.cssSelector("[data-id='13641a41'] h2"));
 		String price = FunnelCakePriceDiv.getText();
 		consoleOutput.append(Constants.PRICE).append(price).append("\n").append("---------------------").append("\n");
 
-		String descriptionCSV = price.replace(",", "|");
+		String descriptionCSV = description.replace(",", ";");
 		csvOutput.append(String.format("%s,%s,%s\n", heading, price, descriptionCSV));
 
 		WebElement SidesDiv = driver.findElement(By.cssSelector("div[data-id='7ff01fb1']"));
@@ -168,11 +180,11 @@ public class BurgerFactory {
 				String pText = pElement.getText();
 				String[] Sideprice = pText.split("\\$");
 
-				String SidesDescriptionCSV = Sideprice[0].replaceAll("\n", " ").replace(",", "|");
-				csvOutput.append(String.format("%s,%s,%s\n", h3Text, Sideprice[1], SidesDescriptionCSV));
+				String SidesDescriptionCSV = Sideprice[0].replaceAll("\n", " ").replace(",", ";");
+				csvOutput.append(String.format("%s,%s,%s\n", h3Text, "$" + Sideprice[1], SidesDescriptionCSV));
 
 				consoleOutput.append(Constants.TITLE).append(h3Text).append("\n").append(Constants.PRICE)
-						.append(Sideprice[1]).append("\n").append(Constants.DESCRIPTION).append(Sideprice[0])
+						.append("$" + Sideprice[1]).append("\n").append(Constants.DESCRIPTION).append(Sideprice[0])
 						.append("\n").append("----------\n");
 
 			}
@@ -186,6 +198,7 @@ public class BurgerFactory {
 
 		WebElement MilkshakesPriceDiv = driver.findElement(By.cssSelector("div[data-id='213c5c53']"));
 		String milkshakePrice = MilkshakesPriceDiv.findElement(By.tagName("h2")).getText();
+//		System.out.print("-----------------------"+consoleOutput);
 		consoleOutput.append("Price for any flavored milkshake: ").append(milkshakePrice).append("\n");
 
 		List<WebElement> MilkshakesFlavoursDiv = driver.findElements(By.cssSelector("section[data-id='23411114'] h3"));
@@ -200,9 +213,38 @@ public class BurgerFactory {
 
 		}
 
+//		System.out.print(csvOutput);
+
+		List<String> consoleResult = Features.validatePrices(consoleOutput.toString());
+
+		for (String result : consoleResult) {
+			System.out.println(result);
+		}
+		
+		if (Features.areAllValid(consoleResult)) {
+            System.out.println("All values are valid. in text");
+        } else {
+            System.out.println("Some values are invalid. text");
+        }
+		
+		List<String> csvResult = Features.validatePrices(csvOutput.toString());
+
+		for (String result : csvResult) {
+			System.out.println(result);
+		}
+		
+		if (Features.areAllValid(csvResult)) {
+            System.out.println("All values are valid. in CSV");
+        } else {
+            System.out.println("Some values are invalid. CSV");
+        }
+    
+
+		
+
 		Utilities.writeConsoleToFile(csvFilePath, csvOutput.toString());
 
-//			System.out.println("Data saved to file: " + filePath); // Confirm the data was saved to the file
+
 		Utilities.writeConsoleToFile(txtFilePath, consoleOutput.toString());
 
 		// Close the browser

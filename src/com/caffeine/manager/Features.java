@@ -123,6 +123,58 @@ public class Features {
 		return searchFrequency;
 
 	}
+	
+	/*VALIDATING THE PRICE FORMAT WITH REGEX*/
+	
+	public static List<String> validatePrices(String data) {
+		List<String> results = new ArrayList<>();
+		String[] lines = data.split("\n");
+
+		for (String line : lines) {
+			// Use a regex pattern to find the value starting with $ until whitespace or
+			// comma
+			Pattern pricePattern = Pattern.compile("\\\\$\\\\d{1,2}(\\\\.\\\\d{1,2})?");
+			Matcher matcher = pricePattern.matcher(line);
+
+			// Check if a match is found
+			while (matcher.find()) {
+				String matchedPrice = matcher.group();
+
+				// Trim the $ sign and validate the price
+				String price = matchedPrice.substring(1).replaceAll("[^\\d.]", "").trim();
+
+				if (isValidPrice(price)) {
+					results.add("Matched Price: " + matchedPrice + ", Valid");
+				} else {
+					results.add("Matched Price: " + matchedPrice + ", Invalid");
+				}
+			}
+		}
+		return results;
+	}
+
+	public static boolean isValidPrice(String price) {
+		// Regex pattern for a valid price format (dollars and cents)
+		String pricePattern = "^\\d+\\.\\d{2}$";
+
+		// Compile the regex pattern
+		Pattern pattern = Pattern.compile(pricePattern);
+
+		// Create a matcher object
+		Matcher matcher = pattern.matcher(price);
+
+		// Check if the price matches the pattern
+		return matcher.matches();
+	}
+	
+	public static boolean areAllValid(List<String> results) {
+        for (String result : results) {
+            if (!result.equals("Valid")) {
+                return false;
+            }
+        }
+        return true;
+    }
 
 
 	/* FINDING PATTERNS USING REGEX */

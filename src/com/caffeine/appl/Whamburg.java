@@ -7,6 +7,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 
+import com.caffeine.manager.Features;
 import com.caffeine.manager.Utilities;
 
 public class Whamburg {
@@ -47,7 +48,7 @@ public class Whamburg {
 			WebElement priceElement = thirdDiv.get(i).findElement(By.cssSelector("span"));
 			String priceText = priceElement.getText();
 
-			String descriptionCSV = descElement.getText().replace(",", "|");
+			String descriptionCSV = descElement.getText().replace(",", ";");
 			csvOutput.append(String.format("%s,%s,%s\n", titleText, priceText, descriptionCSV));
 
 			consoleOutput.append(Constants.TITLE).append(titleText).append("\n").append(Constants.PRICE)
@@ -77,7 +78,7 @@ public class Whamburg {
 			WebElement bsProductPrice = bsThirdDiv.get(i).findElement(By.cssSelector("span"));
 			String bsPriceText = bsProductPrice.getText();
 
-			String descriptionCSV = bsDesc.getText().replace(",", "|");
+			String descriptionCSV = bsDesc.getText().replace(",", ";");
 			csvOutput.append(String.format("%s,%s,%s\n", bsTitleText, bsPriceText, descriptionCSV));
 
 			// Create an array to hold description and price
@@ -107,7 +108,7 @@ public class Whamburg {
 			WebElement friesProductPrice = friesThirdDiv.get(i).findElement(By.cssSelector("span"));
 			String friesPriceText = friesProductPrice.getText();
 
-			String descriptionCSV = friesDesc.getText().replace(",", "|");
+			String descriptionCSV = friesDesc.getText().replace(",", ";");
 			csvOutput.append(String.format("%s,%s,%s\n", friesTitleText, friesPriceText, descriptionCSV));
 
 			consoleOutput.append(Constants.TITLE).append(friesTitleText).append("\n").append(Constants.PRICE)
@@ -137,7 +138,7 @@ public class Whamburg {
 			WebElement dessertProductPrice = dessertThirdDiv.get(i).findElement(By.cssSelector("span"));
 			String dessertPriceText = dessertProductPrice.getText();
 
-			String descriptionCSV = dessertDesc.getText().replace(",", "|");
+			String descriptionCSV = dessertDesc.getText().replace(",", ";");
 			csvOutput.append(String.format("%s,%s,%s\n", dessertTitleText, dessertPriceText, descriptionCSV));
 
 			// Create an array to hold description and price
@@ -203,7 +204,7 @@ public class Whamburg {
 			WebElement shakesProductPrice = shakesThirdDiv.get(i).findElement(By.cssSelector("span"));
 			String shakesPriceText = shakesProductPrice.getText();
 
-			String descriptionCSV = shakesDesc.getText().replace(",", "|");
+			String descriptionCSV = shakesDesc.getText().replace(",", ";");
 			csvOutput.append(String.format("%s,%s\n", shakesTitleText, shakesPriceText, descriptionCSV));
 
 			consoleOutput.append(Constants.TITLE).append(shakesTitleText).append("\n").append(Constants.PRICE)
@@ -259,6 +260,30 @@ public class Whamburg {
 		}
 
 		driver.quit();
+		
+		List<String> consoleResult = Features.validatePrices(consoleOutput.toString());
+
+		for (String result : consoleResult) {
+			System.out.println(result);
+		}
+		
+		if (Features.areAllValid(consoleResult)) {
+            System.out.println("All values are valid. in text");
+        } else {
+            System.out.println("Some values are invalid. text");
+        }
+		
+		List<String> csvResult = Features.validatePrices(csvOutput.toString());
+
+		for (String result : csvResult) {
+			System.out.println(result);
+		}
+		
+		if (Features.areAllValid(csvResult)) {
+            System.out.println("All values are valid. in CSV");
+        } else {
+            System.out.println("Some values are invalid. CSV");
+        }
 
 		Utilities.writeConsoleToFile(csvFilePath, csvOutput.toString());
 

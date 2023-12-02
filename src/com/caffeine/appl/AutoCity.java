@@ -7,6 +7,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 
+import com.caffeine.manager.Features;
 import com.caffeine.manager.Utilities;
 
 public class AutoCity {
@@ -43,7 +44,7 @@ public class AutoCity {
 				WebElement descriptionElement = product
 						.findElement(By.cssSelector(".kv-ee-accent-border .kv-ee-body--sm"));
 				String description = descriptionElement.getText();
-				String descriptionCSV = descriptionElement.getText().replace(",", "|");
+				String descriptionCSV = descriptionElement.getText().replace(",", ";");
 
 				csvOutput.append(String.format("%s,%s,%s\n", title, price, descriptionCSV));
 
@@ -68,7 +69,7 @@ public class AutoCity {
 				String price = priceElement.getText();
 				String description = descriptionElement.getText();
 
-				String descriptionCSV = descriptionElement.getText().replace(",", "|");
+				String descriptionCSV = descriptionElement.getText().replace(",", ";");
 				csvOutput.append(String.format("%s,%s,%s\n", title, price, descriptionCSV));
 
 				// Write the extracted details to the file
@@ -93,7 +94,7 @@ public class AutoCity {
 				String price = priceElement.getText();
 				String description = descriptionElement.getText();
 
-				String descriptionCSV = descriptionElement.getText().replace(",", "|");
+				String descriptionCSV = descriptionElement.getText().replace(",", ";");
 				csvOutput.append(String.format("%s,%s,%s\n", title, price, descriptionCSV));
 
 				// Write the extracted details to the file
@@ -118,7 +119,7 @@ public class AutoCity {
 				String price = priceElement.getText();
 				String description = descriptionElement.getText();
 
-				String descriptionCSV = descriptionElement.getText().replace(",", "|");
+				String descriptionCSV = descriptionElement.getText().replace(",", ";");
 				csvOutput.append(String.format("%s,%s,%s\n", title, price, descriptionCSV));
 
 				// Write the extracted details to the file
@@ -143,7 +144,7 @@ public class AutoCity {
 				String price = priceElement.getText();
 				String description = descriptionElement.getText();
 
-				String descriptionCSV = description.replaceAll("\n", " ").replace(",", "|");
+				String descriptionCSV = description.replaceAll("\n", " ").replace(",", ";");
 				csvOutput.append(String.format("%s,%s,%s\n", title, price, descriptionCSV));
 
 				// Write the extracted details to the file
@@ -169,7 +170,7 @@ public class AutoCity {
 				String price = priceElement.getText();
 				String description = descriptionElement.getText();
 
-				String descriptionCSV = descriptionElement.getText().replace(",", "|");
+				String descriptionCSV = descriptionElement.getText().replace(",", ";");
 				csvOutput.append(String.format("%s,%s,%s\n", title, price, descriptionCSV));
 
 				// Write the extracted details to the file
@@ -181,6 +182,32 @@ public class AutoCity {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
+		List<String> consoleResult = Features.validatePrices(consoleOutput.toString());
+
+		for (String result : consoleResult) {
+			System.out.println(result);
+		}
+		
+		if (Features.areAllValid(consoleResult)) {
+            System.out.println("All values are valid. in text");
+        } else {
+            System.out.println("Some values are invalid. text");
+        }
+		
+		List<String> csvResult = Features.validatePrices(csvOutput.toString());
+
+		for (String result : csvResult) {
+			System.out.println(result);
+		}
+		
+		if (Features.areAllValid(csvResult)) {
+            System.out.println("All values are valid. in CSV");
+        } else {
+            System.out.println("Some values are invalid. CSV");
+        }
+		
+		
 
 		Utilities.writeConsoleToFile(csvFilePath, csvOutput.toString());
 
