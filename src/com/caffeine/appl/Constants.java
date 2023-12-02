@@ -21,6 +21,9 @@ public class Constants {
 	public static final String AUTO_CITY_FILE = "AutoCity";
 	public static final String BURGER_FACTORY_FILE = "BurgerFactory";
 	public static final String WHAMBURG_FILE = "Whamburg";
+	public static final String FREQ_COUNT = " Here you go! these are the options across cafes ";
+	public static final String PAGE_RANK = " Ranking your cafe having the most options for you! ";
+	
 
 	public static final String CAFE_DATA_FILE = "cafe_data.csv";
 	public static final String COMPARABLE_FILE = "comparable_file";
@@ -35,5 +38,6 @@ public class Constants {
 	public static final String ANSI_YELLOW = "\u001B[33m";
 	public static final String ANSI_PURPLE = "\u001B[35m";
 	public static final String ANSI_BOLD = "\u001B[1m";
+	public static final String ANSI_GREEN = "\u001B[32m";
 
 }

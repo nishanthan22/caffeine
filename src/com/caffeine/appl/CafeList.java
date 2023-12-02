@@ -7,9 +7,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
+import com.caffeine.manager.Utilities;
+
 public class CafeList {
     private Map<String, CafeData> cafes;
-    
+
     public class CafeData {
         private Map<String, Double> menu;
 
@@ -25,10 +27,10 @@ public class CafeList {
             return menu;
         }
     }
-    
+
     public CafeList() {
         this.cafes = new HashMap<>();
-        initializeDataFromCSV("cafe_data.csv");
+        initializeDataFromCSV(Utilities.getFilePath(Constants.FILE_NAME_PATH_PREFIX, Constants.CAFE_DATA_FILE, true));
     }
 
     private void initializeDataFromCSV(String fileName) {
@@ -71,20 +73,12 @@ public class CafeList {
         System.out.println("Cafe not found: " + userInput);
     }
 
-
-    public static void main(String[] args) {
-        CafeList cafeList = new CafeList();
-        Scanner scanner = new Scanner(System.in);
-
-        System.out.print("Enter the name of the cafe to explore: ");
-        String cafeName = scanner.nextLine();
-
+    // New method to explore cafe with a provided name
+    public void exploreCafeWithName(String cafeName) {
         if (cafeName != null && !cafeName.isEmpty()) {
-            cafeList.exploreCafe(cafeName);
+            exploreCafe(cafeName);
         } else {
             System.out.println("Cafe name cannot be empty.");
         }
-
-        scanner.close();
     }
 }
