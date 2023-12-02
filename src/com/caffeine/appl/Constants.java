@@ -16,7 +16,11 @@ public class Constants {
 
 	public static final String WORD_COUNTS_FILE = "word_counts.csv";
 	public static final String ERROR_MESSAGE = "ERROR OCCURRED ";
-	
-	public static final String CSV_FILE_NAME = "cafe_data.csv";
+
+	public static final String AUTO_CITY_FILE = "AutoCity";
+	public static final String BURGER_FACTORY_FILE = "BurgerFactory";
+	public static final String WHAMBURG_FILE = "Whamburg";
+
+	public static final String CAFE_DATA_FILE = "cafe_data.csv";
 
 }

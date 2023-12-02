@@ -47,7 +47,7 @@ public class BurgerFactory {
 			String description = burgerDetailsElement.getText();
 			String[] price = description.split("\\$");
 
-			String descriptionCSV = price[0].replaceAll("\n", " ").replace(",", ";");
+			String descriptionCSV = price[0].replaceAll("\n", " ").replace(",", "|");
 			csvOutput.append(String.format("%s,%s,%s\n", title, price[1], descriptionCSV));
 			// Writing to the file
 			consoleOutput.append(Constants.TITLE).append(title).append("\n").append(Constants.PRICE).append(price[1])
@@ -72,7 +72,7 @@ public class BurgerFactory {
 				String priceText = priceElements.get(i).getText();
 				String[] price = priceText.split("\\$");
 
-				String descriptionCSV = price[0].replaceAll("\n", " ").replace(",", ";");
+				String descriptionCSV = price[0].replaceAll("\n", " ").replace(",", "|");
 				csvOutput.append(String.format("%s,%s,%s\n", headingText, price[1], descriptionCSV));
 
 				consoleOutput.append(Constants.TITLE).append(headingText).append("\n").append(Constants.PRICE)
@@ -96,7 +96,7 @@ public class BurgerFactory {
 				String priceText = priceElements.get(i).getText();
 				String[] price = priceText.split("\\$");
 
-				String descriptionCSV = price[0].replaceAll("\n", " ").replace(",", ";");
+				String descriptionCSV = price[0].replaceAll("\n", " ").replace(",", "|");
 				csvOutput.append(String.format("%s,%s,%s\n", headingText, price[1], descriptionCSV));
 
 				consoleOutput.append(Constants.TITLE).append(headingText).append("\n").append(Constants.PRICE)
@@ -119,7 +119,7 @@ public class BurgerFactory {
 				String priceText = priceElements.get(i).getText();
 				String[] price = priceText.split("\\$");
 
-				String descriptionCSV = price[0].replaceAll("\n", " ").replace(",", ";");
+				String descriptionCSV = price[0].replaceAll("\n", " ").replace(",", "|");
 				csvOutput.append(String.format("%s,%s,%s\n", headingText, price[1], descriptionCSV));
 
 				consoleOutput.append(Constants.TITLE).append(headingText).append("\n").append(Constants.PRICE)
@@ -145,7 +145,7 @@ public class BurgerFactory {
 		String price = FunnelCakePriceDiv.getText();
 		consoleOutput.append(Constants.PRICE).append(price).append("\n").append("---------------------").append("\n");
 
-		String descriptionCSV = price.replace(",", ";");
+		String descriptionCSV = price.replace(",", "|");
 		csvOutput.append(String.format("%s,%s,%s\n", heading, price, descriptionCSV));
 
 		WebElement SidesDiv = driver.findElement(By.cssSelector("div[data-id='7ff01fb1']"));
@@ -168,7 +168,7 @@ public class BurgerFactory {
 				String pText = pElement.getText();
 				String[] Sideprice = pText.split("\\$");
 
-				String SidesDescriptionCSV = Sideprice[0].replaceAll("\n", " ").replace(",", ";");
+				String SidesDescriptionCSV = Sideprice[0].replaceAll("\n", " ").replace(",", "|");
 				csvOutput.append(String.format("%s,%s,%s\n", h3Text, Sideprice[1], SidesDescriptionCSV));
 
 				consoleOutput.append(Constants.TITLE).append(h3Text).append("\n").append(Constants.PRICE)

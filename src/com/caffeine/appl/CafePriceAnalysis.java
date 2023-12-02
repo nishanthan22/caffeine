@@ -107,7 +107,7 @@ public class CafePriceAnalysis {
         wordCompletionTrie = new Trie();
         invertedIndex = new HashMap<>();
         cafes = new HashMap<>();
-        initializeDataFromCSV(Utilities.getFilePath(Constants.FILE_NAME_PATH_PREFIX, Constants.CSV_FILE_NAME, false));
+        initializeDataFromCSV(Utilities.getFilePath(Constants.FILE_NAME_PATH_PREFIX, Constants.CAFE_DATA_FILE, true)); 
     }
 
     private void initializeDataFromCSV(String fileName) {
@@ -220,5 +220,5 @@ public class CafePriceAnalysis {
 
         scanner.close();
     }
-
 }
+
