@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
+import com.caffeine.manager.Features;
 import com.caffeine.manager.PageRanking;
 import com.caffeine.manager.Utilities;
 
@@ -86,9 +87,10 @@ public class Caffeine {
 		switch(userChoice) {
 		case 1:
 			System.out.println("Performing WebCrawl of the websites..");
-			AutoCity autoCity = new AutoCity();
-			BurgerFactory burgerFactory = new BurgerFactory();
-			Whamburg whamburg = new Whamburg();
+//			AutoCity autoCity = new AutoCity();
+//			BurgerFactory burgerFactory = new BurgerFactory();
+//			Whamburg whamburg = new Whamburg();
+			Features.displayFrequentlySearched();
 			break;
 		case 2:
 			System.out.println("Chocie 2");

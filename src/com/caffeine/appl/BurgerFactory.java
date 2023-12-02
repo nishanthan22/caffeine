@@ -11,7 +11,7 @@ import com.caffeine.manager.Features;
 import com.caffeine.manager.Utilities;
 
 public class BurgerFactory {
-	public static void main(String[] args) {
+	public BurgerFactory() {
 
 		String txtFilePath = Utilities.getFilePath(Constants.FILE_NAME_PATH_PREFIX, "BurgerFactory.txt", true); // true
 																												// value
