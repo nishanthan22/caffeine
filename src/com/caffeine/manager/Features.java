@@ -20,9 +20,9 @@ public class Features {
 	// In this class we can start implementing the features
 
 	/* SPELL CHECKER */
-	public static void spellChecker() {
+	public static void spellChecker(String dishName) {
 		BinarySearchTree dictionary = new BinarySearchTree();
-		Scanner input = new Scanner(System.in);
+	//	Scanner input = new Scanner(System.in);
 		List<String[]> csvDataList = new ArrayList<>();
 
 		// Insert words into the dictionary
@@ -40,19 +40,16 @@ public class Features {
 
 		String[][] csvData = csvDataList.toArray(new String[0][]);
 
-		System.out.println("Enter the item to be searched : ");
-		String inputWord = input.nextLine();
-
 		dictionary.populateDictionary(csvData);
 
-		inputWord = inputWord.toLowerCase();
-		if (dictionary.search(inputWord)) {
+		dishName = dishName.toLowerCase();
+		if (dictionary.search(dishName)) {
 			System.out.println("The word is spelled correctly.");
 		} else {
 			System.out.println("The word is misspelled.");
 
 			// Get the array of suggested words
-			List<String> suggestedWords = dictionary.suggestCorrectWord(inputWord);
+			List<String> suggestedWords = dictionary.suggestCorrectWord(dishName);
 
 			List<String> inputWordList = new ArrayList<>();
 			List<String> suggestionList = new ArrayList<>();
@@ -62,7 +59,7 @@ public class Features {
 					if (row[0].toLowerCase().contains(suggestion)) {
 						suggestionList.add(row[0]);
 					}
-					if (row[0].toLowerCase().contains(inputWord)) {
+					if (row[0].toLowerCase().contains(dishName)) {
 						inputWordList.add(row[0]);
 					}
 				}
@@ -78,9 +75,7 @@ public class Features {
 					}
 			} else
 				System.out.println("No words found matching the word you have entered");
-
 		}
-		input.close();
 	}
 
 	/* SEARCH FREQUENCY */
@@ -190,7 +185,7 @@ public class Features {
 						if (matcher.find() && line.length > 1) {
 							String data = line[1];
 							if (data.contains("$"))
-								data = data.replace("$", "").substring(0, 3);
+								data = data.replace("$", "").substring(0, 3).trim();
 							productData.put(file + ":" + item, Double.parseDouble(data));
 							break;
 						}
@@ -200,14 +195,13 @@ public class Features {
 				e.getMessage();
 			}
 		}
-		System.out.println(productData);
 		Utilities.generateFinalCSVFile(productData);
 		return productData;
 
 	}
 
 	public static void displayFrequentlySearched() {
-		List<String> wordsList = new ArrayList<>();
+		List<String> wordsList = new ArrayList<String>();
 		String[][] words = Utilities.convertCSVToStringArray(
 				Utilities.getFilePath(Constants.FILE_NAME_PATH_PREFIX, Constants.WORD_COUNTS_FILE, false));
 		for (int i = 0; i < words.length; i++) {
@@ -215,8 +209,7 @@ public class Features {
 			wordsList.add(firstArrayElements.get(0));
 		}
 		wordsList.remove(0);
-		System.out.println("Words List: " + wordsList);
-
+		System.out.println("Frequently searched words: " + wordsList);
 	}
 
 	public static boolean validateInput(String userInput) {

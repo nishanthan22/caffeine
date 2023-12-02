@@ -39,5 +39,7 @@ public class Constants {
 	public static final String ANSI_PURPLE = "\u001B[35m";
 	public static final String ANSI_BOLD = "\u001B[1m";
 	public static final String ANSI_GREEN = "\u001B[32m";
+	
+	public static final String VALUE_MISMATCH_MESSAGE = "Please enter the choice among the specified options only...";
 
 }
