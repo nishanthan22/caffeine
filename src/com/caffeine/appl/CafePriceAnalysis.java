@@ -107,7 +107,7 @@ public class CafePriceAnalysis {
         wordCompletionTrie = new Trie();
         invertedIndex = new HashMap<>();
         cafes = new HashMap<>();
-        initializeDataFromCSV(Utilities.getFilePath(Constants.FILE_NAME_PATH_PREFIX, Constants.CAFE_DATA_FILE, true)); 
+        initializeDataFromCSV(Utilities.getFilePath(Constants.FILE_NAME_PATH_PREFIX, Constants.CAFE_DATA_FILE, false)); 
     }
 
     private void initializeDataFromCSV(String fileName) {
@@ -197,28 +197,20 @@ public class CafePriceAnalysis {
 
     }
 
-    public static void main(String[] args) {
-        CafePriceAnalysis cafePriceAnalysis = new CafePriceAnalysis();
-        Scanner scanner = new Scanner(System.in);
-
-        System.out.print("Enter your favorite dish: ");
-        String userInput = scanner.nextLine();
-
+    public void processUserInput(String userInput) {
         if (userInput != null && !userInput.isEmpty()) {
             if (Features.validateInput(userInput)) {
-                List<String> completions = cafePriceAnalysis.wordCompletion(userInput);
+                List<String> completions = wordCompletion(userInput);
                 if (!completions.isEmpty()) {
                     System.out.println("\nDid you mean: " + completions);
                 }
-                cafePriceAnalysis.displayCategoriesWithPrices(userInput);
+                displayCategoriesWithPrices(userInput);
             } else {
                 System.out.println("Invalid input. Please enter letters and spaces only.");
             }
         } else {
             System.out.println("Input cannot be empty.");
         }
-
-        scanner.close();
     }
 }
 

@@ -70,7 +70,8 @@ public class PageRanking {
 
     @SafeVarargs
 	private static void count(String dish, HashSet<DishInfo>... dishSets) {
-        System.out.println("Frequency count of \"" + dish + "\" in each file:");
+    	// Declaring statement
+    	Utilities.printStyledPattern(Constants.FREQ_COUNT, "'", true, Constants.ANSI_YELLOW, Constants.ANSI_BOLD);
 
         // Normalize the input dish by converting to lowercase and removing whitespace
         String formattedDish = dish.toLowerCase().replaceAll("\\s", "");
@@ -97,8 +98,7 @@ public class PageRanking {
                 }
 
                 frequencyCounts.add(fileFrequencyCount);
-                //System.out.println("File " + frequencyCounts.size() + ": " + fileFrequencyCount);
-                System.out.println(getWebsiteName(dishSet) + ": " + fileFrequencyCount+ " results");
+                System.out.println("We found " + fileFrequencyCount + " options at " + getWebsiteName(dishSet) + " for " + dish);
 
                 
         	
@@ -154,11 +154,11 @@ public class PageRanking {
     private static String getWebsiteName(HashSet<DishInfo> dishSet) {
         // Extract the website name from the HashSet
         if (dishSet.equals(AutoCityDishes)) {
-            return "AutoCity";
+            return "AutoCity Cafe";
         } else if (dishSet.equals(BurgerFactoryDishes)) {
-            return "BurgerFactory";
+            return "BurgerFactory Cafe";
         } else if (dishSet.equals(WhamburgDishes)) {
-            return "Whamburg";
+            return "Whamburg Cafe";
         } else {
             return "Unknown";
         }
@@ -169,7 +169,8 @@ public class PageRanking {
     //page ranking feature
     
     private static void rankWebsites(LinkedList<Integer> frequencyCounts, HashSet<DishInfo>... dishSets) {
-        System.out.println("Ranking of websites based on the frequency of the dish:");
+    	int rank = 1;
+        Utilities.printStyledPattern(Constants.PAGE_RANK, "'", true, Constants.ANSI_GREEN, Constants.ANSI_BOLD);
 
         // Create a list of WebsiteInfo objects
         List<WebsiteInfo> websites = new ArrayList<>();
@@ -186,7 +187,8 @@ public class PageRanking {
         // Print the ranking
         while (!priorityQueue.isEmpty()) {
             WebsiteInfo websiteInfo = priorityQueue.poll();
-            System.out.println(websiteInfo.getName() + ": " + websiteInfo.getFrequencyCount());
+            System.out.println(websiteInfo.getName() + " ranked: " + rank + " having " + websiteInfo.getFrequencyCount() + " delectable options available");
+            rank++;
         }
 
     
