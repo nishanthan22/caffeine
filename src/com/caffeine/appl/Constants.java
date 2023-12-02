@@ -1,6 +1,5 @@
 package com.caffeine.appl;
 
-import com.caffeine.manager.Utilities;
 
 public class Constants {
 

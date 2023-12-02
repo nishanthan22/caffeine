@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import com.caffeine.manager.Features;
 import com.caffeine.manager.Utilities;
@@ -43,7 +44,7 @@ class Trie {
             if (node.children.containsKey(ch)) {
                 node = node.children.get(ch);
             } else {
-                return completions; // Return empty list if the prefix is not in the Trie
+                return completions;
             }
         }
 
@@ -106,7 +107,7 @@ public class CafePriceAnalysis {
         wordCompletionTrie = new Trie();
         invertedIndex = new HashMap<>();
         cafes = new HashMap<>();
-        initializeDataFromCSV(Utilities.getFilePath(Constants.FILE_NAME_PATH_PREFIX, Constants.CSV_FILE_NAME, true)); // Specify your CSV file name
+        initializeDataFromCSV(Utilities.getFilePath(Constants.FILE_NAME_PATH_PREFIX, Constants.CSV_FILE_NAME, false));
     }
 
     private void initializeDataFromCSV(String fileName) {
@@ -139,25 +140,27 @@ public class CafePriceAnalysis {
     }
 
     public List<String> wordCompletion(String partialWord) {
-        return wordCompletionTrie.searchCompletions(partialWord);
+        return wordCompletionTrie.searchCompletions(partialWord.toLowerCase());
     }
 
+   
     public void displayCategoriesWithPrices(String userInput) {
         String lowerCaseInput = userInput.toLowerCase();
 
-        // Try to find a partial match
-        CafeCategory category = invertedIndex.values().stream()
+        List<CafeCategory> categories = invertedIndex.values().stream()
                 .filter(cat -> cat.getName().toLowerCase().contains(lowerCaseInput))
-                .findFirst()
-                .orElse(null);
+                .collect(Collectors.toList());
 
-        if (category != null) {
-            System.out.println("Category: " + category.getName() + ", Price: " + category.getPrice());
-            findLowestPrice(category.getName());
+        if (!categories.isEmpty()) {
+            System.out.println("\nDid you mean: " + categories.stream().map(CafeCategory::getName).collect(Collectors.toList())+"\n");
+            categories.forEach(category -> {
+                findLowestPrice(category.getName());
+            });
         } else {
             System.out.println("No results found for " + userInput);
         }
     }
+
 
     public void findLowestPrice(String dishName) {
         List<String> cafesWithCategory = new ArrayList<>();
@@ -187,7 +190,7 @@ public class CafePriceAnalysis {
                     )
                     .toList();
 
-            System.out.println("Here's the Best Deal for you! " + lowestPrice + " from " + cafesWithLowestPrice);
+            System.out.println("\nHere's the Best Deal for you for " + dishName + ": " + lowestPrice + " from " + cafesWithLowestPrice + "\n");
         } else {
             System.out.println("No prices found for " + dishName);
         }
@@ -198,17 +201,15 @@ public class CafePriceAnalysis {
         CafePriceAnalysis cafePriceAnalysis = new CafePriceAnalysis();
         Scanner scanner = new Scanner(System.in);
 
-        // Example usage:
-        System.out.print("Enter your search term: ");
+        System.out.print("Enter your favorite dish: ");
         String userInput = scanner.nextLine();
 
         if (userInput != null && !userInput.isEmpty()) {
             if (Features.validateInput(userInput)) {
                 List<String> completions = cafePriceAnalysis.wordCompletion(userInput);
                 if (!completions.isEmpty()) {
-                    System.out.println("Did you mean: " + completions);
+                    System.out.println("\nDid you mean: " + completions);
                 }
-
                 cafePriceAnalysis.displayCategoriesWithPrices(userInput);
             } else {
                 System.out.println("Invalid input. Please enter letters and spaces only.");
@@ -219,4 +220,5 @@ public class CafePriceAnalysis {
 
         scanner.close();
     }
+
 }
