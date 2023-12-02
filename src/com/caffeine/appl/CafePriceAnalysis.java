@@ -220,7 +220,8 @@ public class CafePriceAnalysis {
                 List<String> completions = cafePriceAnalysis.wordCompletion(dishName);
                 if (!completions.isEmpty()) {
                     System.out.println("\nDid you mean: " + completions);
-                }
+                } else
+                	Features.spellChecker(dishName);
                 cafePriceAnalysis.displayCategoriesWithPrices(dishName);
             } else {
                 System.out.println("Invalid input. Please enter letters and spaces only.");
