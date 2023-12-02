@@ -190,7 +190,7 @@ public class Features {
 						if (matcher.find() && line.length > 1) {
 							String data = line[1];
 							if (data.contains("$"))
-								data = data.replace("$", "").substring(0, 3);
+								data = data.replace("$", "").substring(0, 3).trim();
 							productData.put(file + ":" + item, Double.parseDouble(data));
 							break;
 						}
@@ -200,14 +200,13 @@ public class Features {
 				e.getMessage();
 			}
 		}
-		System.out.println(productData);
 		Utilities.generateFinalCSVFile(productData);
 		return productData;
 
 	}
 
 	public static void displayFrequentlySearched() {
-		List<String> wordsList = new ArrayList<>();
+		List<String> wordsList = new ArrayList<String>();
 		String[][] words = Utilities.convertCSVToStringArray(
 				Utilities.getFilePath(Constants.FILE_NAME_PATH_PREFIX, Constants.WORD_COUNTS_FILE, false));
 		for (int i = 0; i < words.length; i++) {
@@ -215,8 +214,7 @@ public class Features {
 			wordsList.add(firstArrayElements.get(0));
 		}
 		wordsList.remove(0);
-		System.out.println("Words List: " + wordsList);
-
+		System.out.println("Frequently searched words: " + wordsList);
 	}
 
 	public static boolean validateInput(String userInput) {

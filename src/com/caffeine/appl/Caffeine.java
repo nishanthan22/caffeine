@@ -1,7 +1,9 @@
 package com.caffeine.appl;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.InputMismatchException;
+import java.util.List;
 import java.util.Scanner;
 
 import com.caffeine.manager.Features;
@@ -32,7 +34,6 @@ public class Caffeine {
 		do {
 			restartSwitch = false; // Reset the flag before re-entering the switch
 
-
 			try {
 				userChoice = userInput.nextInt();
 				switch (userChoice) {
@@ -56,14 +57,14 @@ public class Caffeine {
 				}
 
 			} catch (InputMismatchException e) {
-                System.out.print("Please enter the choice among the specified options only...");
-                userInput.next(); // Clear the invalid input from the scanner buffer
-            } catch (Exception e) {
-                System.err.println(Constants.UNKNOWN_EXCEPTION + e.getMessage());
-                break;
-            }
-		}while (userChoice != 4 || restartSwitch); 
-	
+				System.out.print("Please enter the choice among the specified options only...");
+				userInput.next(); // Clear the invalid input from the scanner buffer
+			} catch (Exception e) {
+				System.err.println(Constants.UNKNOWN_EXCEPTION + e.getMessage());
+				break;
+			}
+		} while (userChoice != 4 || restartSwitch);
+
 		/*
 		 * Scanner sc=new Scanner(System.in); System.out.println("Enter a dish: ");
 		 * String dish=sc.nextLine();
@@ -81,19 +82,32 @@ public class Caffeine {
 		// Display options
 		for (String option : options)
 			Utilities.printPattern(option, Constants.HYPHEN, false);
+		Utilities.printPatternWithLength(42, Constants.UNDERSCORE);
+
 		System.out.println("Enter the choice: ");
 		int userChoice = userInput.nextInt();
-		
-		switch(userChoice) {
+		userInput.nextLine();
+
+		switch (userChoice) {
 		case 1:
 			System.out.println("Performing WebCrawl of the websites..");
-//			AutoCity autoCity = new AutoCity();
-//			BurgerFactory burgerFactory = new BurgerFactory();
-//			Whamburg whamburg = new Whamburg();
-			Features.displayFrequentlySearched();
+			AutoCity autoCity = new AutoCity();
+			BurgerFactory burgerFactory = new BurgerFactory();
+			Whamburg whamburg = new Whamburg();
 			break;
 		case 2:
-			System.out.println("Chocie 2");
+			Features.displayFrequentlySearched();
+			System.out.print("Type the dish to search for the deals: ");
+			String dish = userInput.nextLine();
+			try {
+				Features.retrieveDataByPattern(dish);
+				Features.retrieveOrStoreFrequency(dish); // search frequency
+				CafePriceAnalysis.cafeAnalyser(dish);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
 			break;
 		case 3:
 			System.out.println("Going back to previous menu....");
@@ -110,9 +124,5 @@ public class Caffeine {
 	private static void performAdvancedSearch() {
 
 	}
-
-	
-
-	
 
 }

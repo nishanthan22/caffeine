@@ -167,7 +167,7 @@ public class Utilities {
 	}
 	public static void printPattern(String text, String delimeter, boolean separateLine) {
 
-		int length = text.length() + 4;
+		int length = 46;
 		StringBuilder pattern = new StringBuilder();
 
 		for (int i = 0; i < length; i++) {

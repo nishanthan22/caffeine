@@ -8,6 +8,8 @@ import java.util.stream.Collectors;
 
 import com.caffeine.manager.Features;
 import com.caffeine.manager.Utilities;
+import com.opencsv.CSVReader;
+import com.opencsv.exceptions.CsvValidationException;
 
 
 class TrieNode {
@@ -107,32 +109,43 @@ public class CafePriceAnalysis {
         wordCompletionTrie = new Trie();
         invertedIndex = new HashMap<>();
         cafes = new HashMap<>();
-        initializeDataFromCSV(Utilities.getFilePath(Constants.FILE_NAME_PATH_PREFIX, Constants.CAFE_DATA_FILE, true)); 
+        initializeDataFromCSV(Utilities.getFilePath(Constants.FILE_NAME_PATH_PREFIX, Constants.COMPARABLE_FILE.concat(Constants.CSV_EXTENSION), true)); 
     }
 
     private void initializeDataFromCSV(String fileName) {
         try (BufferedReader br = new BufferedReader(new FileReader(fileName))) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                String[] data = line.split(",");
-                if (data.length >= 3) {
-                    String cafeName = data[0].trim();
-                    String foodOption = data[1].trim();
-                    try {
-                        double price = Double.parseDouble(data[2].trim());
+        	CSVReader reader = new CSVReader(new FileReader(fileName));
+            String[] line;
+            try {
+				while ((line = reader.readNext()) != null) {
+					for (String item : line) {
 
-                        // Add data to word completion trie and inverted index
-                        wordCompletionTrie.insert(foodOption);
-                        invertedIndex.put(foodOption.toLowerCase(), new CafeCategory(foodOption, price));
+				    if (line.length >= 3) {
+				        String cafeName = line[0].trim();
+				        String foodOption = line[1].trim();
+				        String priceStr = line[2];
 
-                        // Add data to cafes
-                        cafes.computeIfAbsent(cafeName, k -> new Cafe()).addCategory(foodOption, price);
-                    } catch (NumberFormatException e) {
-                        // Handle the case where the price is not a valid double
-                        System.err.println("Invalid price format for " + foodOption + " in cafe " + cafeName);
-                    }
-                }
-            }
+				        try {
+				     
+				            double price = Double.valueOf(priceStr);
+
+				            // Add data to word completion trie and inverted index
+				            wordCompletionTrie.insert(foodOption);
+				            invertedIndex.put(foodOption.toLowerCase(), new CafeCategory(foodOption, price));
+
+				            // Add data to cafes
+				            cafes.computeIfAbsent(cafeName, k -> new Cafe()).addCategory(foodOption, price);
+				            break;
+				        } catch (NumberFormatException e) {
+				            // Handle the case where the price is not a valid double
+				            System.err.println("Invalid price format for " + foodOption + " in cafe " + cafeName);
+				        }
+				    }}
+				}
+			} catch (CsvValidationException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
         } catch (IOException e) {
             e.printStackTrace();
             System.err.println("Error loading data from CSV file.");
@@ -152,7 +165,7 @@ public class CafePriceAnalysis {
                 .collect(Collectors.toList());
 
         if (!categories.isEmpty()) {
-            System.out.println("\nDid you mean: " + categories.stream().map(CafeCategory::getName).collect(Collectors.toList())+"\n");
+            System.out.println("\nAvailable varieties: " + categories.stream().map(CafeCategory::getName).collect(Collectors.toList())+"\n");
             categories.forEach(category -> {
                 findLowestPrice(category.getName());
             });
@@ -175,6 +188,7 @@ public class CafePriceAnalysis {
         });
 
 
+
         if (!cafesWithCategory.isEmpty()) {
             double lowestPrice = cafesWithCategory.stream()
                     .map(cafeKey -> cafes.get(cafeKey).getCategories(dishName))
@@ -194,31 +208,26 @@ public class CafePriceAnalysis {
         } else {
             System.out.println("No prices found for " + dishName);
         }
+        
 
     }
 
-    public static void main(String[] args) {
+    public static void cafeAnalyser(String dishName) {
         CafePriceAnalysis cafePriceAnalysis = new CafePriceAnalysis();
-        Scanner scanner = new Scanner(System.in);
 
-        System.out.print("Enter your favorite dish: ");
-        String userInput = scanner.nextLine();
-
-        if (userInput != null && !userInput.isEmpty()) {
-            if (Features.validateInput(userInput)) {
-                List<String> completions = cafePriceAnalysis.wordCompletion(userInput);
+        if (dishName != null && !dishName.isEmpty()) {
+            if (Features.validateInput(dishName)) {
+                List<String> completions = cafePriceAnalysis.wordCompletion(dishName);
                 if (!completions.isEmpty()) {
                     System.out.println("\nDid you mean: " + completions);
                 }
-                cafePriceAnalysis.displayCategoriesWithPrices(userInput);
+                cafePriceAnalysis.displayCategoriesWithPrices(dishName);
             } else {
                 System.out.println("Invalid input. Please enter letters and spaces only.");
             }
         } else {
             System.out.println("Input cannot be empty.");
         }
-
-        scanner.close();
     }
 }
 
