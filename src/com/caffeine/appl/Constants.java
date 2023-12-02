@@ -1,5 +1,6 @@
 package com.caffeine.appl;
 
+
 public class Constants {
 
 	public static final String BURGERFACTORY_URL = "https://burgerfactory.ca/our-menu/";
