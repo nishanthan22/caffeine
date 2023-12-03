@@ -30,6 +30,7 @@ public class Caffeine {
 			for (String option : options)
 				Utilities.printPattern(option, Constants.HYPHEN, false);
 
+			/* START OF THE LOOP- THE CONSOLE INTERACTION*/
 			do {
 				restartSwitch = false; // Reset the flag before re-entering the switch
 				try {
@@ -50,7 +51,7 @@ public class Caffeine {
 						break;
 					case 4:
 						System.out.println("Bad to see you leaving :(\nProgram closed...");
-						System.exit(1);
+						System.exit(0);
 						break;
 					default:
 						System.out.println("The choice you have entered in invalid, Please enter a valid one");
@@ -86,6 +87,7 @@ public class Caffeine {
 				Utilities.printPattern(option, Constants.HYPHEN, false);
 			System.out.println("Enter the choice: ");
 			int userChoice = userInput.nextInt();
+			userInput.nextLine();
 			switch (userChoice) {
 			case 1:
 				System.out.println("Enter your Cherished Spot..");
@@ -136,6 +138,7 @@ public class Caffeine {
 				getDeals(userInput);
 				break;
 			case 2:
+				Features.displayFrequentlySearched();
 				getDeals(userInput);
 				break;
 			case 3:

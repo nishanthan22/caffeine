@@ -3,9 +3,11 @@ package com.caffeine.manager;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.PriorityQueue;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -21,7 +23,7 @@ public class Features {
 	/* SPELL CHECKER */
 	public static void spellChecker(String dishName) {
 		BinarySearchTree dictionary = new BinarySearchTree();
-	//	Scanner input = new Scanner(System.in);
+		// Scanner input = new Scanner(System.in);
 		List<String[]> csvDataList = new ArrayList<>();
 
 		// Insert words into the dictionary
@@ -175,8 +177,8 @@ public class Features {
 						file.concat(Constants.CSV_EXTENSION), true);
 				CSVReader reader = new CSVReader(new FileReader(filePath));
 				// Escape user input to handle special regex characters
-		        String escapedInput = Pattern.quote(word);
-		        String regexPattern = "\\b(" + escapedInput + "\\w*)\\b";
+				String escapedInput = Pattern.quote(word);
+				String regexPattern = "\\b(" + escapedInput + "\\w*)\\b";
 				Pattern pattern = Pattern.compile(regexPattern, Pattern.CASE_INSENSITIVE);
 
 				while ((line = reader.readNext()) != null) {
@@ -196,22 +198,46 @@ public class Features {
 				e.getMessage();
 			}
 		}
-		if(!productData.isEmpty())
+		if (!productData.isEmpty())
 			Utilities.generateFinalCSVFile(productData);
 		return productData;
 
 	}
 
 	public static void displayFrequentlySearched() {
-		List<String> wordsList = new ArrayList<String>();
+		Map<String, Integer> wordFrequencyMap = new HashMap<>();
+
 		String[][] words = Utilities.convertCSVToStringArray(
 				Utilities.getFilePath(Constants.FILE_NAME_PATH_PREFIX, Constants.WORD_COUNTS_FILE, false));
-		for (int i = 0; i < words.length; i++) {
+		for (int i = 1; i < words.length; i++) {
 			List<String> firstArrayElements = Arrays.asList(words[i]);
-			wordsList.add(firstArrayElements.get(0));
+			String countStr = firstArrayElements.get(1).replace("\"", "").trim();
+			int count = Integer.parseInt(countStr);
+			wordFrequencyMap.put(firstArrayElements.get(0), count);
 		}
-		wordsList.remove(0);
-		System.out.println("Frequently searched words: " + wordsList);
+		// Using a PriorityQueue to store top 5 searched words based on their frequencies
+		if (!wordFrequencyMap.isEmpty() && wordFrequencyMap != null) {
+			PriorityQueue<Map.Entry<String, Integer>> mostSearchedWords = new PriorityQueue<>(
+					Comparator.comparingInt(Map.Entry::getValue));
+
+			for (Map.Entry<String, Integer> entry : wordFrequencyMap.entrySet()) {
+				mostSearchedWords.offer(entry);
+				if (mostSearchedWords.size() > 6)
+					mostSearchedWords.poll();
+			}
+
+			List<String> top5List = new ArrayList<>();
+			while (!mostSearchedWords.isEmpty()) {
+				top5List.add(0, mostSearchedWords.poll().getKey());
+			}
+
+			StringBuilder output = new StringBuilder("Frequently searched words: [ ");
+			output.append(String.join(", ", top5List));
+			output.append(" ]");
+
+			System.out.println(output);
+		}
+
 	}
 
 	public static boolean validateInput(String userInput) {
