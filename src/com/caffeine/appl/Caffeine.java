@@ -36,9 +36,8 @@ public class Caffeine {
 				try {
 					
 					Utilities.printPatternWithLength(welcomeMsg.length(), Constants.UNDERSCORE);
-					System.out.print("Enter the choice: ");
-					userChoice = userInput.nextInt();
-					userInput.nextLine();
+					System.out.println("Enter the choice: ");
+					userChoice = userInput.nextInt(); 
 					switch (userChoice) {
 					case 1:
 						getBestOrLatestDeals();
@@ -65,17 +64,19 @@ public class Caffeine {
 					System.err.println(Constants.UNKNOWN_EXCEPTION + e.getMessage());
 					break;
 				}
-			} while (userChoice != 4 || restartSwitch);
-			userInput.close();
+			} while (userChoice != 4 || restartSwitch); 
 		}
 
 	
 
 	private static void findBestCafe() {
 		System.out.println("Enter your dish to get your options..");
-		try (Scanner sc = new Scanner(System.in)) {
+		try {
+			Scanner sc = new Scanner(System.in);
 			String input = sc.nextLine();
-			PageRanking.freqCount(input);
+			PageRanking.freqCount(input); 
+		}catch (Exception e) {
+			System.err.println(Constants.UNKNOWN_EXCEPTION + e.getMessage());
 		}
 	}
 
