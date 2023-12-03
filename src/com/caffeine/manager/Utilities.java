@@ -162,6 +162,7 @@ public class Utilities {
 		}
 
 	}
+
 	public static void printPattern(String text, String delimeter, boolean separateLine) {
 
 		int length = 46;
@@ -179,31 +180,30 @@ public class Utilities {
 		} else
 			System.out.println(delimeter + text + delimeter + Constants.ANSI_RESET);
 	}
-	
-	public static void printStyledPattern(String text, String delimeter, boolean separateLine, String color, String style) {
 
-	    int length = text.length() + 4;
-	    StringBuilder pattern = new StringBuilder();
+	public static void printStyledPattern(String text, String delimeter, boolean separateLine, String color,
+			String style) {
 
-	    for (int i = 0; i < length; i++) {
-	        pattern.append(delimeter);
-	    }
+		int length = text.length() + 4;
+		StringBuilder pattern = new StringBuilder();
 
-	    if (separateLine) {
-	        System.out.println(color + style + pattern + Constants.ANSI_RESET);
-	        System.out.println(color + style + delimeter + " " + text + " " + delimeter + Constants.ANSI_RESET);
-	        System.out.println(color + style + pattern + Constants.ANSI_RESET);
-	    } else {
-	        System.out.println(color + style + delimeter + " " + text + " " + delimeter + Constants.ANSI_RESET);
-	    }
+		for (int i = 0; i < length; i++) {
+			pattern.append(delimeter);
+		}
+
+		if (separateLine) {
+			System.out.println(color + style + pattern + Constants.ANSI_RESET);
+			System.out.println(color + style + delimeter + " " + text + " " + delimeter + Constants.ANSI_RESET);
+			System.out.println(color + style + pattern + Constants.ANSI_RESET);
+		} else {
+			System.out.println(color + style + delimeter + " " + text + " " + delimeter + Constants.ANSI_RESET);
+		}
 	}
-
 
 	public static void printPatternWithLength(int n, String delimeter) {
 		for (int i = 0; i < n + 4; i++)
 			System.out.print(Constants.ANSI_CYAN + delimeter + Constants.ANSI_RESET);
 		System.out.println();
 	}
-
 
 }

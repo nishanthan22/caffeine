@@ -47,7 +47,6 @@ public class Features {
 		if (dictionary.search(dishName)) {
 			System.out.println("The word is spelled correctly.");
 		} else {
-			
 
 			// Get the array of suggested words
 			List<String> suggestedWords = dictionary.suggestCorrectWord(dishName);
@@ -215,7 +214,8 @@ public class Features {
 			int count = Integer.parseInt(countStr);
 			wordFrequencyMap.put(firstArrayElements.get(0), count);
 		}
-		// Using a PriorityQueue to store top 5 searched words based on their frequencies
+		// Using a PriorityQueue to store top 5 searched words based on their
+		// frequencies
 		if (!wordFrequencyMap.isEmpty() && wordFrequencyMap != null) {
 			PriorityQueue<Map.Entry<String, Integer>> mostSearchedWords = new PriorityQueue<>(
 					Comparator.comparingInt(Map.Entry::getValue));
