@@ -95,7 +95,6 @@ public class Utilities {
 	public static void writeConsoleToFile(String filePath, String consoleOutput) {
 		try (BufferedWriter bw = new BufferedWriter(new FileWriter(filePath))) {
 			bw.write(consoleOutput);
-			System.out.println("Console output saved to file: " + filePath);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -158,8 +157,6 @@ public class Utilities {
 
 			// Close the writer
 			writer.close();
-
-			System.out.println("Data has been written to " + csvFilePath);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -167,7 +164,7 @@ public class Utilities {
 	}
 	public static void printPattern(String text, String delimeter, boolean separateLine) {
 
-		int length = text.length() + 4;
+		int length = 46;
 		StringBuilder pattern = new StringBuilder();
 
 		for (int i = 0; i < length; i++) {

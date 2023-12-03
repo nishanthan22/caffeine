@@ -3,10 +3,11 @@ package com.caffeine.manager;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Scanner;
+import java.util.PriorityQueue;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -20,9 +21,9 @@ public class Features {
 	// In this class we can start implementing the features
 
 	/* SPELL CHECKER */
-	public static void spellChecker() {
+	public static void spellChecker(String dishName) {
 		BinarySearchTree dictionary = new BinarySearchTree();
-		Scanner input = new Scanner(System.in);
+		// Scanner input = new Scanner(System.in);
 		List<String[]> csvDataList = new ArrayList<>();
 
 		// Insert words into the dictionary
@@ -40,19 +41,16 @@ public class Features {
 
 		String[][] csvData = csvDataList.toArray(new String[0][]);
 
-		System.out.println("Enter the item to be searched : ");
-		String inputWord = input.nextLine();
-
 		dictionary.populateDictionary(csvData);
 
-		inputWord = inputWord.toLowerCase();
-		if (dictionary.search(inputWord)) {
+		dishName = dishName.toLowerCase();
+		if (dictionary.search(dishName)) {
 			System.out.println("The word is spelled correctly.");
 		} else {
 			System.out.println("The word is misspelled.");
 
 			// Get the array of suggested words
-			List<String> suggestedWords = dictionary.suggestCorrectWord(inputWord);
+			List<String> suggestedWords = dictionary.suggestCorrectWord(dishName);
 
 			List<String> inputWordList = new ArrayList<>();
 			List<String> suggestionList = new ArrayList<>();
@@ -62,7 +60,7 @@ public class Features {
 					if (row[0].toLowerCase().contains(suggestion)) {
 						suggestionList.add(row[0]);
 					}
-					if (row[0].toLowerCase().contains(inputWord)) {
+					if (row[0].toLowerCase().contains(dishName)) {
 						inputWordList.add(row[0]);
 					}
 				}
@@ -78,9 +76,7 @@ public class Features {
 					}
 			} else
 				System.out.println("No words found matching the word you have entered");
-
 		}
-		input.close();
 	}
 
 	/* SEARCH FREQUENCY */
@@ -180,8 +176,10 @@ public class Features {
 				String filePath = Utilities.getFilePath(Constants.FILE_NAME_PATH_PREFIX,
 						file.concat(Constants.CSV_EXTENSION), true);
 				CSVReader reader = new CSVReader(new FileReader(filePath));
-
-				Pattern pattern = Pattern.compile("\\b" + word + "\\b", Pattern.CASE_INSENSITIVE);
+				// Escape user input to handle special regex characters
+				String escapedInput = Pattern.quote(word);
+				String regexPattern = "\\b(" + escapedInput + "\\w*)\\b";
+				Pattern pattern = Pattern.compile(regexPattern, Pattern.CASE_INSENSITIVE);
 
 				while ((line = reader.readNext()) != null) {
 					line.toString().replace(";", "|");
@@ -190,7 +188,7 @@ public class Features {
 						if (matcher.find() && line.length > 1) {
 							String data = line[1];
 							if (data.contains("$"))
-								data = data.replace("$", "").substring(0, 3);
+								data = data.replace("$", "").substring(0, 3).trim();
 							productData.put(file + ":" + item, Double.parseDouble(data));
 							break;
 						}
@@ -200,22 +198,45 @@ public class Features {
 				e.getMessage();
 			}
 		}
-		System.out.println(productData);
-		Utilities.generateFinalCSVFile(productData);
+		if (!productData.isEmpty())
+			Utilities.generateFinalCSVFile(productData);
 		return productData;
 
 	}
 
 	public static void displayFrequentlySearched() {
-		List<String> wordsList = new ArrayList<>();
+		Map<String, Integer> wordFrequencyMap = new HashMap<>();
+
 		String[][] words = Utilities.convertCSVToStringArray(
 				Utilities.getFilePath(Constants.FILE_NAME_PATH_PREFIX, Constants.WORD_COUNTS_FILE, false));
-		for (int i = 0; i < words.length; i++) {
+		for (int i = 1; i < words.length; i++) {
 			List<String> firstArrayElements = Arrays.asList(words[i]);
-			wordsList.add(firstArrayElements.get(0));
+			String countStr = firstArrayElements.get(1).replace("\"", "").trim();
+			int count = Integer.parseInt(countStr);
+			wordFrequencyMap.put(firstArrayElements.get(0), count);
 		}
-		wordsList.remove(0);
-		System.out.println("Words List: " + wordsList);
+		// Using a PriorityQueue to store top 5 searched words based on their frequencies
+		if (!wordFrequencyMap.isEmpty() && wordFrequencyMap != null) {
+			PriorityQueue<Map.Entry<String, Integer>> mostSearchedWords = new PriorityQueue<>(
+					Comparator.comparingInt(Map.Entry::getValue));
+
+			for (Map.Entry<String, Integer> entry : wordFrequencyMap.entrySet()) {
+				mostSearchedWords.offer(entry);
+				if (mostSearchedWords.size() > 6)
+					mostSearchedWords.poll();
+			}
+
+			List<String> top5List = new ArrayList<>();
+			while (!mostSearchedWords.isEmpty()) {
+				top5List.add(0, mostSearchedWords.poll().getKey());
+			}
+
+			StringBuilder output = new StringBuilder("Frequently searched words: [ ");
+			output.append(String.join(", ", top5List));
+			output.append(" ]");
+
+			System.out.println(output);
+		}
 
 	}
 
