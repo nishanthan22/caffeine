@@ -47,7 +47,7 @@ public class Features {
 		if (dictionary.search(dishName)) {
 			System.out.println("The word is spelled correctly.");
 		} else {
-			System.out.println("The word is misspelled.");
+			
 
 			// Get the array of suggested words
 			List<String> suggestedWords = dictionary.suggestCorrectWord(dishName);
@@ -67,7 +67,7 @@ public class Features {
 			}
 			// Print the suggested words
 			if (!inputWordList.isEmpty() || !suggestionList.isEmpty()) {
-				System.out.println("Suggestions:" + "Did you mean".toUpperCase());
+				System.out.println("*WORD MISSPELLED*\nDid you mean");
 				int prntIdx = 1;
 				for (List<String> list : List.of(inputWordList, suggestionList))
 					for (int i = 0; i < list.size(); i++) {
@@ -75,7 +75,7 @@ public class Features {
 						prntIdx++;
 					}
 			} else
-				System.out.println("No words found matching the word you have entered");
+				System.out.println("No menus found :(");
 		}
 	}
 

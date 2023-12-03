@@ -152,7 +152,6 @@ public class CafePriceAnalysis {
 				findLowestPrice(category.getName());
 			});
 		} else {
-			System.out.println("No results found for " + userInput);
 			Features.spellChecker(userInput);
 		}
 	}
