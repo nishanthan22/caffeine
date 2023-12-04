@@ -3,6 +3,7 @@ package com.caffeine.appl;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
 
 import com.caffeine.manager.Features;
 import com.caffeine.manager.PageRanking;
@@ -12,6 +13,9 @@ import com.caffeine.manager.Utilities;
  * This class is the Main application class of this project
  */
 public class Caffeine {
+	
+	public static String isWebcrawlDone = Constants.N;
+	public static long webcrawlDoneTime = 0;
 
 	public static void main(String[] args) {
 
@@ -108,6 +112,7 @@ public class Caffeine {
 	private static void getBestOrLatestDeals() {
 
 		Scanner userInput = new Scanner(System.in);
+		boolean isDataFetched = false;
 		try {
 			// Utilities.clearConsole();
 			Utilities.printPattern("Get Best/ Latest deals", Constants.STAR, true);
@@ -122,7 +127,30 @@ public class Caffeine {
 			userInput.nextLine();
 			switch (userChoice) {
 			case 1:
-				performWebCrawl();
+				if (isWebcrawlDone.equalsIgnoreCase(Constants.N))
+					performWebCrawl();
+				else if (isWebcrawlDone.equalsIgnoreCase(Constants.Y)) {
+					long timeFlag = Long.parseLong(Constants.WEB_CRAWL_TIME_FLAG);
+					long elapsedTime = System.currentTimeMillis() - webcrawlDoneTime;
+					if (elapsedTime > TimeUnit.MINUTES.toMillis(timeFlag))
+						performWebCrawl();
+					else {
+						System.out.println("The data is fetched from website within " + Constants.WEB_CRAWL_TIME_FLAG + " mins\nDo you want to fetch again? (Y/N) : ");
+						boolean isLoopRequired;
+						do {
+							isLoopRequired=false;
+							String isWCRequired = userInput.nextLine();
+							if(isWCRequired.equalsIgnoreCase(Constants.Y) || isWCRequired.equalsIgnoreCase(Constants.YES)) {
+								performWebCrawl();
+							} else if(isWCRequired.equalsIgnoreCase(Constants.N) || isWCRequired.equalsIgnoreCase(Constants.NO)) {
+								System.out.println("Great!!! The data will be loaded from file....");
+							} else {
+								System.err.println(Constants.VALUE_MISMATCH_MESSAGE);
+								isLoopRequired =true;
+							}
+						} while (isLoopRequired );
+					}
+				}
 				getDeals();
 				break;
 			case 2:
@@ -148,6 +176,8 @@ public class Caffeine {
 		AutoCity autoCity = new AutoCity();
 		BurgerFactory burgerFactory = new BurgerFactory();
 		Whamburg whamburg = new Whamburg(); // web-crawl, data validation using regex
+		isWebcrawlDone = Constants.Y;
+		webcrawlDoneTime = System.currentTimeMillis();
 	}
 
 	public static void getDeals() {

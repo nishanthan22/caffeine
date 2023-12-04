@@ -39,5 +39,12 @@ public class Constants {
 	public static final String ANSI_GREEN = "\u001B[32m";
 
 	public static final String VALUE_MISMATCH_MESSAGE = "Please enter the choice among the specified options only...";
+	
+	public static final String Y = "Y";
+	public static final String N = "N";
+	public static final String YES = "Yes";
+	public static final String NO = "No";
+	
+	public static final String WEB_CRAWL_TIME_FLAG = "2";
 
 }
