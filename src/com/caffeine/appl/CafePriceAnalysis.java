@@ -1,5 +1,6 @@
 package com.caffeine.appl;
 
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -116,6 +117,7 @@ public class CafePriceAnalysis {
 
 	private void initializeDataFromCSV(String fileName) {
 		try {
+
 			CSVReader reader = new CSVReader(new FileReader(fileName));
 			String[] line;
 			while ((line = reader.readNext()) != null) {
@@ -133,8 +135,16 @@ public class CafePriceAnalysis {
 				}
 
 			}
-		} catch (IOException | CsvValidationException e) {
-			e.printStackTrace();
+		} catch (CsvValidationException e) {
+			if (e.getMessage() != null && !e.getMessage().isBlank())
+				System.err.println(Constants.ERROR_MESSAGE + e.getMessage());
+			else
+				System.err.println(Constants.ERROR_MESSAGE + e.getClass().getName());
+		} catch (Exception e) {
+			if (e.getMessage() != null && !e.getMessage().isBlank())
+				System.err.println(Constants.ERROR_MESSAGE + e.getMessage());
+			else
+				System.err.println(Constants.ERROR_MESSAGE + e.getClass().getName());
 		}
 	}
 
@@ -149,7 +159,7 @@ public class CafePriceAnalysis {
 				.filter(cat -> cat.getName().toLowerCase().contains(lowerCaseInput)).collect(Collectors.toList());
 
 		if (!matchingCategories.isEmpty()) {
-			System.out.println("\nDid you mean: "
+			System.out.println("\nHere are the suggestions for your input: "
 					+ matchingCategories.stream().map(CafeCategory::getName).collect(Collectors.toList()) + "\n");
 
 			matchingCategories.forEach(cat -> {

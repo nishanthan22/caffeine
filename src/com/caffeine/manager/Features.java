@@ -1,5 +1,6 @@
 package com.caffeine.manager;
 
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,6 +15,7 @@ import java.util.regex.Pattern;
 import javax.management.InvalidAttributeValueException;
 
 import com.caffeine.appl.BinarySearchTree;
+import com.caffeine.appl.Caffeine;
 import com.caffeine.appl.Constants;
 import com.opencsv.CSVReader;
 
@@ -170,11 +172,13 @@ public class Features {
 		List<String> filesList = Arrays.asList(Constants.AUTO_CITY_FILE, Constants.BURGER_FACTORY_FILE,
 				Constants.WHAMBURG_FILE);
 		String[] line = null;
+		boolean isFileRead = false;
 		for (String file : filesList) {
 			try {
 				String filePath = Utilities.getFilePath(Constants.FILE_NAME_PATH_PREFIX,
 						file.concat(Constants.CSV_EXTENSION), true);
 				CSVReader reader = new CSVReader(new FileReader(filePath));
+				isFileRead = true;
 				// Escape user input to handle special regex characters
 				String escapedInput = Pattern.quote(word);
 				String regexPattern = "\\b(" + escapedInput + "\\w*)\\b";
@@ -192,6 +196,12 @@ public class Features {
 							break;
 						}
 					}
+				}
+			} catch (FileNotFoundException e) {
+				if(!isFileRead) {
+					System.out.println("Hold on...we are fetching the data using Webcrawl");
+					Caffeine.performWebCrawl();
+					retrieveDataByPattern(word);
 				}
 			} catch (Exception e) {
 				e.getMessage();
