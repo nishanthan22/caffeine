@@ -23,14 +23,16 @@ public class Caffeine {
 		String[] options = { "1) Get the best/latest deals", "2) Find best restaurant for the dish",
 				"3) Advanced search", "4) Exit" };
 
-		/* CONSOLE STYLING */
-		System.out.println("\t");
-		Utilities.printPattern(welcomeMsg, Constants.HYPHEN, true);
-		for (String option : options)
-			Utilities.printPattern(option, Constants.HYPHEN, false);
+		
 
 		/* START OF THE LOOP- THE CONSOLE INTERACTION */
 		do {
+			/* CONSOLE STYLING */
+			System.out.println("\t");
+			Utilities.printPattern(welcomeMsg, Constants.HYPHEN, true);
+			for (String option : options)
+				Utilities.printPattern(option, Constants.HYPHEN, false);
+			
 			restartSwitch = false; // Reset the flag before re-entering the switch
 			try {
 
@@ -88,12 +90,8 @@ public class Caffeine {
 			int userChoice = userInput.nextInt(); 
 			switch (userChoice) {
 			
-			case 1:
-				System.out.print("Enter your favorite dish: ");
-				Scanner scanner = new Scanner(System.in);
-				CafePriceAnalysis cafePriceAnalysis = new CafePriceAnalysis();
-				String dishToExplore = scanner.nextLine();
-				cafePriceAnalysis.processUserInput(dishToExplore);
+			case 1: 
+				getDeals();
 				break;
 			case 2:
 				System.out.println("Going back to previous menu....");
@@ -124,15 +122,12 @@ public class Caffeine {
 			userInput.nextLine();
 			switch (userChoice) {
 			case 1:
-				System.out.println("Performing WebCrawl of the websites..");
-				AutoCity autoCity = new AutoCity();
-				BurgerFactory burgerFactory = new BurgerFactory();
-				Whamburg whamburg = new Whamburg(); // web-crawl, data validation using regex
-				getDeals(userInput);
+				performWebCrawl();
+				getDeals();
 				break;
 			case 2:
 				Features.displayFrequentlySearched();
-				getDeals(userInput);
+				getDeals();
 				break;
 			case 3:
 				System.out.println("Going back to previous menu....");
@@ -148,14 +143,23 @@ public class Caffeine {
 		}
 	}
 
-	public static void getDeals(Scanner userInput) {
-		System.out.print("Type the dish to search for the deals: ");
-		String dish = userInput.nextLine();
+	public static void performWebCrawl() {
+		System.out.println("Performing WebCrawl of the websites..");
+		AutoCity autoCity = new AutoCity();
+		BurgerFactory burgerFactory = new BurgerFactory();
+		Whamburg whamburg = new Whamburg(); // web-crawl, data validation using regex
+	}
+
+	public static void getDeals() {
+		
 		try {
+			Scanner userInput = new Scanner(System.in);
+			System.out.print("Type the dish to search for the deals: ");
+			String dish = userInput.nextLine();
 			Features.retrieveDataByPattern(dish); // finding patterns using regex
 			Features.retrieveOrStoreFrequency(dish); // search frequency
-			CafePriceAnalysis cf = new CafePriceAnalysis();
-			cf.processUserInput(dish);// inv indexing
+			CafePriceAnalysis cpa = new CafePriceAnalysis();
+			cpa.processUserInput(dish);// inv indexing
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
