@@ -197,12 +197,11 @@ public class CafePriceAnalysis {
 	}
 
 	public void processUserInput(String userInput) {
-		if (userInput != null && !userInput.isEmpty()) {
+		if (userInput != null && !userInput.isBlank()) {
 			if (Features.validateInput(userInput)) {
 				displayCategoriesWithPrices(userInput);
-			} else {
-				System.out.println("Invalid input. Please enter letters and spaces only.");
-			}
+			} else if (userInput instanceof String)
+				System.out.println("Please enter the choice among the specified options");
 		} else {
 			System.out.println("Input cannot be empty.");
 		}

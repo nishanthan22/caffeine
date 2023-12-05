@@ -24,7 +24,7 @@ public class Caffeine {
 		Scanner userInput = new Scanner(System.in);
 		int userChoice = 0;
 		boolean restartSwitch = false;
-		String[] options = { "1) Get the best/latest deals", "2) Find best restaurant for the dish",
+		String[] options = { "1) Get the best/latest deals", "2) Cafe that has surplus varities of your favorite dish",
 				"3) Advanced search", "4) Exit" };
 
 		
@@ -76,15 +76,30 @@ public class Caffeine {
 		System.out.println("Enter your dish to get your options..");
 		try {
 			Scanner sc = new Scanner(System.in);
-			String input = sc.nextLine();
-			PageRanking.freqCount(input);
+			boolean isInvalidInput = false;
+			do {
+				String input = sc.nextLine();
+
+				if (input != null && !input.isBlank()) {
+					if (Features.validateInput(input)) {
+						PageRanking.freqCount(input);
+						isInvalidInput = false;
+					} else {
+						System.out.println("Please enter a valid input");
+						isInvalidInput = true;
+					}
+				} else {
+					System.out.println("Input cannot be blank/null");
+					isInvalidInput = true;
+				}
+			} while (isInvalidInput);
 		} catch (Exception e) {
 			System.err.println(Constants.UNKNOWN_EXCEPTION + e.getMessage());
 		}
 	}
 
 	private static void performAdvancedSearch() {
-		try  {
+		try   {
 			Scanner userInput = new Scanner(System.in);
 			String[] options = { "1) Find your favorite dish across cafes!",
 					"2) Go back" };
@@ -110,7 +125,6 @@ public class Caffeine {
 
 	@SuppressWarnings("unused")
 	private static void getBestOrLatestDeals() {
-
 		Scanner userInput = new Scanner(System.in);
 		boolean isDataFetched = false;
 		try {
@@ -181,15 +195,25 @@ public class Caffeine {
 	}
 
 	public static void getDeals() {
-		
 		try {
 			Scanner userInput = new Scanner(System.in);
 			System.out.print("Type the dish to search for the deals: ");
+			
+			boolean isInvalidInput = false;
+			do {	
 			String dish = userInput.nextLine();
-			Features.retrieveDataByPattern(dish); // finding patterns using regex
-			Features.retrieveOrStoreFrequency(dish); // search frequency
-			CafePriceAnalysis cpa = new CafePriceAnalysis();
-			cpa.processUserInput(dish);// inv indexing
+			if(dish!= null && !dish.isBlank()) {
+				Features.retrieveDataByPattern(dish); // finding patterns using regex
+				Features.retrieveOrStoreFrequency(dish); // search frequency
+				CafePriceAnalysis cpa = new CafePriceAnalysis();
+				cpa.processUserInput(dish);// inv indexing
+				isInvalidInput = false;
+			}
+			else {
+				System.out.println("Please enter a valid input!");
+				isInvalidInput = true;
+			}
+			} while(isInvalidInput);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
