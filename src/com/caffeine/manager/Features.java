@@ -43,7 +43,7 @@ public class Features {
 
 		String[][] csvData = csvDataList.toArray(new String[0][]);
 
-		dictionary.populateDictionary(csvData);
+		dictionary.dicTpopulatng(csvData);
 
 		dishName = dishName.toLowerCase();
 		if (dictionary.search(dishName)) {
@@ -51,7 +51,7 @@ public class Features {
 		} else {
 
 			// Get the array of suggested words
-			List<String> suggestedWords = dictionary.suggestCorrectWord(dishName);
+			List<String> suggestedWords = dictionary.givinggcrctelements(dishName);
 
 			List<String> inputWordList = new ArrayList<>();
 			List<String> suggestionList = new ArrayList<>();

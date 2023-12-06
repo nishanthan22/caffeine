@@ -5,66 +5,66 @@ import java.util.List;
 
 public class BinarySearchTree {
 	class Node {
-		String word;
-		Node left, right;
+		String typWordele;
+		Node l_eleInN, r_eleInN;
 
 		public Node(String item) {
-			word = item;
-			left = right = null;
+			typWordele = item;
+			l_eleInN = r_eleInN = null;
 		}
 	}
 
-	Node root;
+	Node par_eleInN;
 
 	public BinarySearchTree() {
-		root = null;
+		par_eleInN = null;
 	}
 
-	void insert(String word) {
-		root = insertRec(root, word);
+	void insert(String eleInc) {
+		par_eleInN = recorInsrnt(par_eleInN, eleInc);
 	}
 
-	Node insertRec(Node root, String word) {
-		if (root == null) {
-			root = new Node(word);
-			return root;
+	Node recorInsrnt(Node rrrN, String wwD) {
+		if (rrrN == null) {
+			rrrN = new Node(wwD);
+			return rrrN;
 		}
 
-		if (word.compareTo(root.word) < 0) {
-			root.left = insertRec(root.left, word);
-		} else if (word.compareTo(root.word) > 0) {
-			root.right = insertRec(root.right, word);
+		if (wwD.compareTo(rrrN.typWordele) < 0) {
+			rrrN.l_eleInN = recorInsrnt(rrrN.l_eleInN, wwD);
+		} else if (wwD.compareTo(rrrN.typWordele) > 0) {
+			rrrN.r_eleInN = recorInsrnt(rrrN.r_eleInN, wwD);
 		}
 
-		return root;
+		return rrrN;
 	}
 
-	public boolean search(String word) {
-		return searchRec(root, word);
+	public boolean search(String wwD) {
+		return recSerchInTreeBS(par_eleInN, wwD);
 	}
 
-	boolean searchRec(Node root, String word) {
-		if (root == null) {
+	boolean recSerchInTreeBS(Node rrt, String wwd) {
+		if (rrt == null) {
 			return false;
 		}
 
-		if (word.compareTo(root.word) == 0) {
+		if (wwd.compareTo(rrt.typWordele) == 0) {
 			return true;
 		}
 
-		if (word.compareTo(root.word) < 0) {
-			return searchRec(root.left, word);
+		if (wwd.compareTo(rrt.typWordele) < 0) {
+			return recSerchInTreeBS(rrt.l_eleInN, wwd);
 		} else {
-			return searchRec(root.right, word);
+			return recSerchInTreeBS(rrt.r_eleInN, wwd);
 		}
 	}
 
-	// Suggestions for a misspelled word
-	public List<String> suggestCorrectWord(String word) {
-		List<String> suggestions = new ArrayList<>();
-		suggestCorrectWordRec(root, word, suggestions);
-		suggestions.sort((a, b) -> calculateLevenshteinDistance(a, word) - calculateLevenshteinDistance(b, word));
-		return suggestions;
+	// Suggestions for a misspelled typWordele
+	public List<String> givinggcrctelements(String word) {
+		List<String> suggs = new ArrayList<>();
+		suggestCorrectWordRec(par_eleInN, word, suggs);
+		suggs.sort((a, b) -> calculateLevenshteinDistance(a, word) - calculateLevenshteinDistance(b, word));
+		return suggs;
 	}
 
 	void suggestCorrectWordRec(Node root, String word, List<String> suggestions) {
@@ -72,16 +72,16 @@ public class BinarySearchTree {
 			return;
 		}
 
-		suggestCorrectWordRec(root.left, word, suggestions);
+		suggestCorrectWordRec(root.l_eleInN, word, suggestions);
 
-		// Check if the current word in the dictionary is a suggestion for the
-		// misspelled word
-		if (isSuggestion(root.word, word)) {
+		// Check if the current typWordele in the dictionary is a suggestion for the
+		// misspelled typWordele
+		if (isSuggestion(root.typWordele, word)) {
 
-			suggestions.add(root.word);
+			suggestions.add(root.typWordele);
 		}
 
-		suggestCorrectWordRec(root.right, word, suggestions);
+		suggestCorrectWordRec(root.r_eleInN, word, suggestions);
 
 		suggestions.sort((a, b) -> calculateLevenshteinDistance(a, word) - calculateLevenshteinDistance(b, word));
 
@@ -92,40 +92,46 @@ public class BinarySearchTree {
 		// Adjust the threshold as needed
 		return distance > 0 && distance < 2; // Allow words with a Levenshtein distance less than 2
 	}
-
-	int calculateLevenshteinDistance(String word1, String word2) {
-		int m = word1.length();
-		int n = word2.length();
-
-		int[][] dp = new int[m + 1][n + 1];
-
-		for (int i = 0; i <= m; i++) {
-			for (int j = 0; j <= n; j++) {
-				if (i == 0) {
-					dp[i][j] = j;
-				} else if (j == 0) {
-					dp[i][j] = i;
-				} else if (word1.charAt(i - 1) == word2.charAt(j - 1)) {
-					dp[i][j] = dp[i - 1][j - 1];
+	// computing the distance sing Lalgo
+	int calculateLevenshteinDistance(String inp_Wone, String inp_Wtwo) {
+		// the rorrws and the collunms
+		int rrwwo = inp_Wone.length();
+		int ccllo = inp_Wtwo.length();
+		// matrix initiation
+		int[][] dp = new int[rrwwo + 1][ccllo + 1];
+		//travverrsingg the roows annd colls too geet thee desirred diisstannce usiing edd
+		//annfd tthee allgo
+		for (int lc1 = 0; lc1 <= rrwwo; lc1++) {
+			// llloopp 1
+			for (int lc2 = 0; lc2 <= ccllo; lc2++) {
+				//llloopp 2
+				if (lc1 == 0) {
+					// baaasee casee
+					dp[lc1][lc2] = lc2;
+				} else if (lc2 == 0) { // thrre otther coondiitons
+					dp[lc1][lc2] = lc1; // saamee
+				} else if (inp_Wone.charAt(lc1 - 1) == inp_Wtwo.charAt(lc2 - 1)) {
+					dp[lc1][lc2] = dp[lc1 - 1][lc2 - 1]; // remoove
 				} else {
-					dp[i][j] = 1 + Math.min(dp[i - 1][j], Math.min(dp[i][j - 1], dp[i - 1][j - 1]));
+					// comparrison anfft the calcculatiom
+					dp[lc1][lc2] = 1 + Math.min(dp[lc1 - 1][lc2], Math.min(dp[lc1][lc2 - 1], dp[lc1 - 1][lc2 - 1])); //reeplace
 				}
 			}
 		}
-
-		return dp[m][n];
+		// calccullation returning
+		return dp[rrwwo][ccllo];
 	}
 
-	public void populateDictionary(String[][] csvData) {
-		for (String[] row : csvData) {
-			String[] values = row[0].split(" ");
-			for (String value : values) {
-				if (value.equals("Title")) {
+	public void dicTpopulatng(String[][] csvData) {
+		for (String[] rrwo : csvData) {
+			String[] vvs = rrwo[0].split(" ");
+			for (String vv : vvs) {
+				if (vv.equals("Title")) {
 					continue;
 				}
-				char[] valueArray = value.toCharArray();
+				char[] valueArray = vv.toCharArray();
 				if (!Character.isDigit(valueArray[0])) {
-					this.insert(value.toLowerCase());
+					this.insert(vv.toLowerCase());
 				}
 			}
 		}

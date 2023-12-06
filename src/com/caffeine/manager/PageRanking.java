@@ -62,14 +62,13 @@ public class PageRanking {
 	@SafeVarargs
 	private static void count(String dish, HashSet<DishInfo>... dishSets) {
 		// Declaring statement
-		Utilities.printStyledPattern(Constants.FREQ_COUNT, "'", true, Constants.ANSI_YELLOW, Constants.ANSI_BOLD);
-
+		
 		// Normalize the input dish by converting to lowercase and removing whitespace
 		String formattedDish = dish.toLowerCase().replaceAll("\\s", "");
 
 		// Initialize a LinkedList to store the frequency count for each file
 		LinkedList<Integer> frequencyCounts = new LinkedList<>();
-
+		boolean isFreshEntry = true;
 		if (formattedDish.equals("burger")) {
 			for (HashSet<DishInfo> dishSet : dishSets) {
 				int fileFrequencyCount = 0;
@@ -91,11 +90,22 @@ public class PageRanking {
 				}
 
 				frequencyCounts.add(fileFrequencyCount);
-				System.out.println(
-						"We found " + fileFrequencyCount + " options at " + getWebsiteName(dishSet) + " for " + dish);
+				if (fileFrequencyCount != 0) {
+					if (isFreshEntry) {
+						Utilities.printStyledPattern(Constants.FREQ_COUNT, "'", true, Constants.ANSI_YELLOW,
+								Constants.ANSI_BOLD);
+						isFreshEntry = false;
+					}
+					System.out.println("We found " + fileFrequencyCount + " options at " + getWebsiteName(dishSet)
+							+ " for " + dish);
 
+				}
+				
 			}
-			rankWebsites(frequencyCounts, dishSets);
+			if(!isFreshEntry)
+				rankWebsites(frequencyCounts, dishSets);
+			else
+				System.out.println("No menu found matching your input:(");
 		}
 
 		else {
@@ -113,11 +123,20 @@ public class PageRanking {
 					}
 				}
 
-				frequencyCounts.add(fileFrequencyCount);
-				System.out.println(getWebsiteName(dishSet) + ": " + fileFrequencyCount + " results");
-
+				frequencyCounts.add(fileFrequencyCount); 
+				if(fileFrequencyCount != 0) {
+					if(isFreshEntry) {
+						Utilities.printStyledPattern(Constants.FREQ_COUNT, "'", true, Constants.ANSI_YELLOW, Constants.ANSI_BOLD);
+						isFreshEntry = false;
+					}
+					System.out.println(getWebsiteName(dishSet) + ": " + fileFrequencyCount + " results");
+				}
+				
 			}
-			rankWebsites(frequencyCounts, dishSets);
+			if(!isFreshEntry)
+				rankWebsites(frequencyCounts, dishSets);
+			else
+				System.out.println("No menu found matching your input:(");
 		}
 	}
 

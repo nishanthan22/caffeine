@@ -175,7 +175,7 @@ public class Caffeine {
 				System.out.println("Going back to previous menu....");
 				break;
 			default:
-				System.out.println("Chocie invalid");
+				System.out.println("Choice invalid");
 			}
 		} catch (InputMismatchException e) {
 			System.out.print(Constants.VALUE_MISMATCH_MESSAGE);
